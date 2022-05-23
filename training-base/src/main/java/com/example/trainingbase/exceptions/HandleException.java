@@ -1,8 +1,8 @@
 package com.example.trainingbase.exceptions;
 
-import com.bukalapak.rm.constants.HttpStatusConstants;
-import com.bukalapak.rm.dto.auth.BibResponse;
-import com.bukalapak.rm.utils.ConvertJsonUtils;
+import com.example.trainingbase.constants.HttpStatusConstants;
+import com.example.trainingbase.payload.BibResponse;
+import com.example.trainingbase.utils.ConvertJsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -1,4 +1,4 @@
-package com.example.trainingbase.request;
+package com.example.trainingbase.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
