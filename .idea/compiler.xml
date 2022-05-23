@@ -2,11 +2,16 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="training-base" />
+        <module name="module1 (3)" />
         <module name="module1" />
+        <module name="module1 (1)" />
+        <module name="module1 (2)" />
         <module name="module3" />
         <module name="module2" />
       </profile>
@@ -15,8 +20,12 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="module1" options="-parameters" />
+      <module name="module1 (1)" options="-parameters" />
+      <module name="module1 (2)" options="-parameters" />
+      <module name="module1 (3)" options="-parameters" />
       <module name="module2" options="-parameters" />
       <module name="module3" options="-parameters" />
+      <module name="training-base" options="-parameters" />
       <module name="trainingproject" options="-parameters" />
     </option>
   </component>
