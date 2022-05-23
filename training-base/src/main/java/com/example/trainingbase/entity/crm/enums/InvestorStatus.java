@@ -1,5 +1,8 @@
 package com.example.trainingbase.entity.crm.enums;
 
+import com.example.trainingbase.constants.HttpStatusConstants;
+import com.example.trainingbase.exceptions.BusinessException;
+
 import java.util.Arrays;
 
 public enum InvestorStatus {
@@ -7,7 +10,7 @@ public enum InvestorStatus {
     PROCEEDED(2,"PROCEEDED"),
     APPROVED(3,"APPROVED"),
     REJECTED(4,"REJECTED"),
-    FORM_REJECTED(5,"FORM_REJECTED"), HttpStatusConstants(, );
+    FORM_REJECTED(5,"FORM_REJECTED");
     private final Integer value;
     private final String label;
 
