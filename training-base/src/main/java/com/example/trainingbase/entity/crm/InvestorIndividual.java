@@ -66,4 +66,6 @@ public class InvestorIndividual extends AbstractEntity {
     // BIB sync
     private String sid;
     private String ifua;
+
+    private Integer engageOption;
 }
