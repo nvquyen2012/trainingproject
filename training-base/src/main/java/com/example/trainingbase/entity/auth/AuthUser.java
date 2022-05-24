@@ -1,12 +1,14 @@
 package com.example.trainingbase.entity.auth;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Getter
@@ -14,7 +16,7 @@ import java.sql.Timestamp;
 @Table(name = "auth_user", schema = "auth_bib")
 @ToString
 @NoArgsConstructor
-public class AuthUser {
+public class AuthUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
@@ -74,4 +76,36 @@ public class AuthUser {
     @Column(name = "username")
     private String username;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(this.getRole());
+        return Collections.singletonList(authority);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        //TODO: todo
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        //TODO: todo
+        if(this.getStatus().equals("ACTIVE") || this.getStatus().equals("INACTIVE")){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        //TODO: todo
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        //TODO: todo
+        return true;
+    }
 }

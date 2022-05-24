@@ -1,7 +1,7 @@
 package com.example.trainingbase.entity.crm.enums;
 
-import com.bukalapak.rm.constants.HttpStatusConstants;
-import com.bukalapak.rm.exceptions.BusinessException;
+import com.example.trainingbase.constants.HttpStatusConstants;
+import com.example.trainingbase.exceptions.BusinessException;
 
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package com.example.trainingbase.exceptions;
+package com.test.trainingbase.exceptions;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/BiB
+    username: postgres
+    password: Fateavernous123
+    show-sql: true
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  security:
+    user:
+      name: bib
+      password: 123456
+
+server:
+  error:
+    include-message: always
