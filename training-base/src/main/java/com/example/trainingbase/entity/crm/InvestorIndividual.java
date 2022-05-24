@@ -68,6 +68,5 @@ public class InvestorIndividual extends AbstractEntity {
     private String sid;
     private String ifua;
 
-//    Engage option
-    private EngageOption engageOption;
+    private Integer engageOption;
 }
