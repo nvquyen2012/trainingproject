@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.example</groupId>
         <artifactId>trainingproject</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <groupId>com.example</groupId>
     <artifactId>training-base</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>module1</name>
-    <description>module3</description>
+    <name>training-base</name>
+    <description>base classes</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -68,5 +68,37 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>com.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
+                    <configuration>
+                        <forceJavaCompilerUse>true</forceJavaCompilerUse>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <anotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>1.18.22</version>
+                            </path>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>1.4.2.Final</version>
+                            </path>
+                        </anotationProcessorPaths>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
