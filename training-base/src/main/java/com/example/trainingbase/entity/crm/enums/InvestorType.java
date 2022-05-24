@@ -1,3 +1,4 @@
+/*
 package com.example.trainingbase.entity.crm.enums;
 
 import com.bukalapak.rm.constants.HttpStatusConstants;
@@ -24,9 +25,11 @@ public enum InvestorType {
         return this.label;
     }
 
-    /**
+    */
+/**
      * Can throw BusinessException
-     */
+     *//*
+
     public static InvestorType fromType(String type) {
         return Arrays.stream(values())
                 .filter(e -> e.label().equalsIgnoreCase(type))
@@ -34,3 +37,4 @@ public enum InvestorType {
                 .orElseThrow(() -> new BusinessException(HttpStatusConstants.TYPE_INVALID_CODE, HttpStatusConstants.TYPE_INVALID_MESSAGE));
     }
 }
+*/

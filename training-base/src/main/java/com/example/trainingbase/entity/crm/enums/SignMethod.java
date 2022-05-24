@@ -1,3 +1,4 @@
+/*
 package com.example.trainingbase.entity.crm.enums;
 
 import com.bukalapak.rm.constants.HttpStatusConstants;
@@ -25,9 +26,11 @@ public enum SignMethod {
         return this.label;
     }
 
-    /**
+    */
+/**
      * Can throw BusinessException
-     */
+     *//*
+
     public static SignMethod findByCode(Integer code) {
         return Arrays.stream(values()).
                 filter(e -> Objects.equals(e.value(), code)).
@@ -36,3 +39,4 @@ public enum SignMethod {
                         HttpStatusConstants.INVALID_SIGN_METHOD_MESSAGE));
     }
 }
+*/
