@@ -4,6 +4,8 @@
     <file url="file://$PROJECT_DIR$/module1/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/module2/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/module3/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/training-base/src/main/java" charset="UTF-8" />
   </component>
 </project>

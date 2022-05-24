@@ -1,6 +1,7 @@
 package com.example.trainingbase.entity.crm;
 
 import com.example.trainingbase.entity.AbstractEntity;
+import com.example.trainingbase.entity.crm.enums.EngageOption;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
