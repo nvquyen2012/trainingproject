@@ -15,6 +15,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -62,5 +63,19 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
 
         institutionalRepository.save(investor);
 //        return institutionalMapper.toDto(investor);
+    }
+
+    @Override
+    public InvestorInstitutional findByInvestorId(String id) {
+        if (institutionalRepository.findById(id).isPresent()){
+            return institutionalRepository.findById(id).get();
+        } else {
+            throw new BusinessException("404","Investor NOT found");
+        }
+    }
+
+    @Override
+    public List<InvestorInstitutional> getAllInvestors() {
+        return institutionalRepository.findAll();
     }
 }
