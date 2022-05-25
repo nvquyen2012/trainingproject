@@ -76,6 +76,16 @@ public class AuthUser implements UserDetails {
     @Column(name = "username")
     private String username;
 
+    //TODO: todo
+    public AuthUser(String fullName, String email, String password, String phoneNumber, String role, int companyId) {
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.companyId = companyId;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(this.getRole());

@@ -18,6 +18,16 @@ public class RegistrationService {
         if(!isValidEmail){
             throw new IllegalStateException(STATUS_NOT_OK);
         }
-        return userService.signUpUser(new AuthUser());
+        if(!(request.getPassword().equals(request.getRPassword()))){
+            throw new IllegalStateException(STATUS_NOT_OK);
+        }
+        return userService.signUpUser(new AuthUser(
+                request.getFullName(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getPhoneNumber(),
+                request.getRoles(),
+                request.getCompanyId()
+        ));
     }
 }
