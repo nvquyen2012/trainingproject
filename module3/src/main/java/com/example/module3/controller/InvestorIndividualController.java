@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/investor-individual")
@@ -27,13 +28,30 @@ public class InvestorIndividualController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Object> saveUpdateInvestor(@RequestBody InvestorIndividual req) {
+    public ResponseEntity<Object> saveInvestor(@RequestBody InvestorIndividual req) {
         try {
             log.info("Start saving a new investor");
             investorIndividualService.saveInvestorIndividual(req);
             log.info("Finish saving a new investor");
             return new ResponseEntity<>(req, HttpStatus.OK);
 
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Object> updateInvestor(@RequestBody InvestorIndividual req) {
+        try {
+            log.info("start updating investor information");
+            Optional<InvestorIndividual> currentInvestor = investorIndividualService.getInvestorById(req.getInvestorId());
+            if (!currentInvestor.isPresent()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            log.info("finish updating investor information");
+            return new ResponseEntity<>(req.getInvestorId(), HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

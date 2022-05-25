@@ -55,6 +55,11 @@ public class InvestorIndividualServiceImpl implements InvestorIndividualService 
         }
     }
 
+    @Override
+    public Optional<InvestorIndividual> getInvestorById(String id) {
+        return investorIndividualRepository.findById(id);
+    }
+
     public void isValidReq(InvestorIndividual req) {
         Optional<InvestorIndividual> currentInvestor = investorIndividualRepository.findByNikNumber(req.getIdentityNumberKTPNIK());
         // validate nik number
