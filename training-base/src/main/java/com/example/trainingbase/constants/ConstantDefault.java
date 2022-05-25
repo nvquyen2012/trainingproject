@@ -22,4 +22,7 @@ public class ConstantDefault {
     public static final String EMAIL_TYPE = "email";
     public static final String PHONE_TYPE = "phoneNumber";
     public static final int _60_SECONDS_ = 60;
+    public static final String APPROVED_STATUS = "APPROVED";
+    public static final String SUBMITTED_STATUS = "SUBMITTED";
+    public static final String REJECTED_STATUS = "REJECTED";
 }
