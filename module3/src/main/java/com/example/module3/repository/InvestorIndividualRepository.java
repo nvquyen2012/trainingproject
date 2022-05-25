@@ -1,5 +1,12 @@
 package com.example.module3.repository;
 import com.example.trainingbase.entity.crm.InvestorIndividual;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
+
 public interface InvestorIndividualRepository extends JpaRepository<InvestorIndividual, String> {
+    @Query("select i from InvestorIndividual i where i.identityNumberKTPNIK = :nikNumber")
+    Optional<InvestorIndividual> findByNikNumber(@Param("nikNumber") String nikNumber);
 }
