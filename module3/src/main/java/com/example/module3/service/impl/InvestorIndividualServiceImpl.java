@@ -35,6 +35,27 @@ public class InvestorIndividualServiceImpl implements InvestorIndividualService 
 
     @Override
     public void saveInvestorIndividual(InvestorIndividual req) {
+        try {
+            isValidReq(req);
+            if (Objects.equals(req.getEngageOption(), EngageOption.REMOTE.getValue())) {
+                SimpleMailMessage message = new SimpleMailMessage();
+                message.setFrom("buiducthinh2502@gmail.com");
+                message.setTo(req.getEmail());
+                message.setSubject("BIB - Complete your registration!!");
+                message.setText("To confirm your account please click here: " +
+                        "http://localhost:8080/confirm-account?uuid=" + req.getInvestorId());
+                log.info("Start sending the information by email...");
+                emailSender.send(message);
+                log.info("mail sent successful!");
+            }
+
+            investorIndividualRepository.save(req);
+        } catch (BusinessException ex) {
+            throw new BusinessException(ex.getCode(), ex.getMessage());
+        }
+    }
+
+    public void isValidReq(InvestorIndividual req) {
         Optional<InvestorIndividual> currentInvestor = investorIndividualRepository.findByNikNumber(req.getIdentityNumberKTPNIK());
         // validate nik number
         if (currentInvestor.isPresent() && currentInvestor.get().getStatus().equals(ConstantDefault.APPROVED_STATUS)) {
@@ -48,19 +69,5 @@ public class InvestorIndividualServiceImpl implements InvestorIndividualService 
         if (!Pattern.compile(RegexConstant.IDENTIFY_REGEX).matcher(req.getIdentityNumberKTPNIK()).matches()) {
             throw new BusinessException("403", "This identify is not valid");
         }
-
-        if (Objects.equals(req.getEngageOption(), EngageOption.REMOTE.getValue())) {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("buiducthinh2502@gmail.com");
-            message.setTo(req.getEmail());
-            message.setSubject("BIB - Complete your registration!!");
-            message.setText("To confirm your account please click here: " +
-                    "http://localhost:8080/confirm-account?uuid=" + req.getInvestorId());
-            log.info("Start sending the information by email...");
-            emailSender.send(message);
-            log.info("mail sent successful!");
-        }
-
-//        investorIndividualRepository.save(req);
     }
 }
