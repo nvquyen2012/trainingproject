@@ -1,4 +1,4 @@
-package com.example.trainingbase.entity.crm;
+package com.example.module2.entity;
 
 import lombok.*;
 
