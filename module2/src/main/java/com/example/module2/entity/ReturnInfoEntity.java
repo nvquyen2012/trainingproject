@@ -3,24 +3,26 @@ package com.example.module2.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Entity
-public class ReturnInfo {
-
+@Table(schema = "public", name = "ReturnInfo")
+public class ReturnInfoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private Double percentage;
     private Double amount;
     @JsonProperty("graph_text")
     private String graphText;
+
+    @ManyToOne
+    @JoinColumn(name = "returnInfo_data")
+    private DataEntity dataEntity;
+
 }
