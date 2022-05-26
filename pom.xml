@@ -9,10 +9,10 @@
         <version>2.7.0</version>
     </parent>
 
-    <groupId>org.example</groupId>
+    <groupId>com.example</groupId>
     <artifactId>trainingproject</artifactId>
-    <version>${revision}</version>
     <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <revision>1.0-SNAPSHOT</revision>
@@ -21,10 +21,9 @@
     </properties>
 
     <modules>
-        <module>module1</module>
-        <module>module2</module>
-        <module>module3</module>
-        <module>training-base</module>
+        <module>modules</module>
+        <module>lib</module>
+        <module>discovery-server</module>
     </modules>
 
     <dependencies>
@@ -33,6 +32,11 @@
             <artifactId>spring-boot</artifactId>
             <version>2.7.0</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>3.1.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -61,6 +65,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -92,53 +101,6 @@
             <version>1.4.2.Final</version>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>module1</id>
-            <activation>
-                <file>
-                    <exists>module1/pom.xml</exists>
-                </file>
-            </activation>
-            <modules>
-                <module>module1</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>module2</id>
-            <activation>
-                <file>
-                    <exists>module2/pom.xml</exists>
-                </file>
-            </activation>
-            <modules>
-                <module>module2</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>module3</id>
-            <activation>
-                <file>
-                    <exists>module3/pom.xml</exists>
-                </file>
-            </activation>
-            <modules>
-                <module>module3</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>training-base</id>
-            <activation>
-                <file>
-                    <exists>training-base/pom.xml</exists>
-                </file>
-            </activation>
-            <modules>
-                <module>training-base</module>
-            </modules>
-        </profile>
-    </profiles>
 
     <build>
         <pluginManagement>
