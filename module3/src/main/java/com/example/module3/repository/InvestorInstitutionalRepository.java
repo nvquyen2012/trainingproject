@@ -11,4 +11,5 @@ public interface InvestorInstitutionalRepository extends JpaRepository<InvestorI
     Optional<InvestorInstitutional> findByNpwpNo(String npwpNo);
 
     List<InvestorInstitutional> findInvestorInstitutionalByRmIdAndStatus(int rmId, String status);
+    List<InvestorInstitutional> findInvestorInstitutionalByRmId(int rmId);
 }
