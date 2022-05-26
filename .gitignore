@@ -1,0 +1,11 @@
+/.idea/
+/.eclipse/
+**/log/
+**/logs/
+**/.mvn
+**/target/
+**/*.iml
+**/*.zip
+**.project
+**.classpath
+**.settings
