@@ -12,4 +12,5 @@ public interface InvestorIndividualRepository extends JpaRepository<InvestorIndi
     @Query("select i from InvestorIndividual i where i.identityNumberKTPNIK = :nikNumber")
     Optional<InvestorIndividual> findByNikNumber(@Param("nikNumber") String nikNumber);
     List<InvestorIndividual> findInvestorIndividualsByRmIdAndStatus(int rmId, String status);
+    List<InvestorIndividual> findInvestorIndividualsByRmId(int rmId);
 }
