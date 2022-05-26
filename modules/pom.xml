@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>trainingproject</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.example</groupId>
+    <artifactId>modules</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <modules>
+        <module>module1</module>
+        <module>module2</module>
+        <module>module3</module>
+    </modules>
+
+    <profiles>
+        <profile>
+            <id>module1</id>
+            <activation>
+                <file>
+                    <exists>module1/pom.xml</exists>
+                </file>
+            </activation>
+            <modules>
+                <module>module1</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>module2</id>
+            <activation>
+                <file>
+                    <exists>module2/pom.xml</exists>
+                </file>
+            </activation>
+            <modules>
+                <module>module2</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>module3</id>
+            <activation>
+                <file>
+                    <exists>module3/pom.xml</exists>
+                </file>
+            </activation>
+            <modules>
+                <module>module3</module>
+            </modules>
+        </profile>
+    </profiles>
+
+    <dependencies>
+    </dependencies>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
