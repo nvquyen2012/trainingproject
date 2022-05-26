@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -31,10 +32,9 @@ public class InvestorServiceImpl implements InvestorService {
         List<InvestorStatusDto> objectList = new ArrayList<>();
         List<InvestorIndividual> individualList = new ArrayList<>();
         List<InvestorInstitutional> institutionalList = new ArrayList<>();
-
-        if (status.equals(null) || "".equals(status)) {
-            individualList = investorIndividualRepository.findAll();
-            institutionalList = investorInstitutionalRepository.findAll();
+        if ("".equals(status)) {
+            individualList = investorIndividualRepository.findInvestorIndividualsByRmId(rmId);
+            institutionalList = investorInstitutionalRepository.findInvestorInstitutionalByRmId(rmId);
         } else {
             individualList = investorIndividualRepository.findInvestorIndividualsByRmIdAndStatus(rmId, status);
             institutionalList = investorInstitutionalRepository.findInvestorInstitutionalByRmIdAndStatus(rmId, status);
