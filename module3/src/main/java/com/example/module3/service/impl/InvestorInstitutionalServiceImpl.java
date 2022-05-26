@@ -11,6 +11,7 @@ import com.example.trainingbase.exceptions.BusinessException;
 import com.example.trainingbase.mapper.InvestorInstitutionalMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+@ComponentScan()
 @Service
 @Slf4j
 public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalService {
@@ -27,8 +29,8 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
     @Autowired
     private InvestorInstitutionalRepository institutionalRepository;
 
-//    @Autowired
-//    private InvestorInstitutionalMapper institutionalMapper;
+    @Autowired
+    private InvestorInstitutionalMapper institutionalMapper;
 
     @Autowired
     private JavaMailSender emailSender;
@@ -66,9 +68,10 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
     }
 
     @Override
-    public InvestorInstitutional findByInvestorId(String id) {
+    public InvestorInstitutionalDto findByInvestorId(String id) {
         if (institutionalRepository.findById(id).isPresent()){
-            return institutionalRepository.findById(id).get();
+            InvestorInstitutional result = institutionalRepository.findById(id).get();
+            return institutionalMapper.toDto(result) ;
         } else {
             throw new BusinessException("404","Investor NOT found");
         }
