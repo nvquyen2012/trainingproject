@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -97,6 +98,8 @@ public class InvestorInstitutional extends AbstractEntity {
     // BIB sync
     private String sid;
     private String ifua;
+
+    private LocalDateTime createdAt;
 
     private Integer engageOption;
 }
