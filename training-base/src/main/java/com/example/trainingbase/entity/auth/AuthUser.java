@@ -14,6 +14,7 @@ import java.util.Collections;
 @Getter
 @Setter
 @Table(name = "auth_user", schema = "auth_bib")
+@EqualsAndHashCode
 @ToString
 @NoArgsConstructor
 public class AuthUser implements UserDetails {
@@ -101,10 +102,7 @@ public class AuthUser implements UserDetails {
     @Override
     public boolean isAccountNonLocked() {
         //TODO: todo
-        if(this.getStatus().equals("ACTIVE") || this.getStatus().equals("INACTIVE")){
-            return true;
-        }
-        return false;
+        return true;
     }
 
     @Override

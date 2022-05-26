@@ -2,7 +2,6 @@ package com.example.module1.model;
 
 import lombok.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -10,7 +9,7 @@ import javax.validation.constraints.Pattern;
 
 @Data
 @AllArgsConstructor
-public class RegistrationRequest {
+public class RegistrationRequestDTO {
     @NotBlank(message = "Email is mandatory")
     @NotEmpty(message = "Email is mandatory")
     private final String email;
