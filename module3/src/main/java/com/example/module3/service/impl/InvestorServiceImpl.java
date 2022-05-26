@@ -32,7 +32,6 @@ public class InvestorServiceImpl implements InvestorService {
         List<InvestorStatusDto> objectList = new ArrayList<>();
         List<InvestorIndividual> individualList = new ArrayList<>();
         List<InvestorInstitutional> institutionalList = new ArrayList<>();
-
         if ("".equals(status)) {
             individualList = investorIndividualRepository.findInvestorIndividualsByRmId(rmId);
             institutionalList = investorInstitutionalRepository.findInvestorInstitutionalByRmId(rmId);
