@@ -36,7 +36,7 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
     private JavaMailSender emailSender;
 
     @Override
-    public void createInvestorInstitutional(InvestorInstitutional investor) {
+    public InvestorInstitutionalDto createInvestorInstitutional(InvestorInstitutional investor) {
         Optional<InvestorInstitutional> currentInvestor = institutionalRepository.findByNpwpNo(investor.getNpwpNo());
         // validate npwp number
         if (currentInvestor.isPresent() && currentInvestor.get().getStatus().equals(ConstantDefault.APPROVED_STATUS)) {
@@ -64,7 +64,7 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
         }
 
         institutionalRepository.save(investor);
-//        return institutionalMapper.toDto(investor);
+        return institutionalMapper.toDto(investor);
     }
 
     @Override

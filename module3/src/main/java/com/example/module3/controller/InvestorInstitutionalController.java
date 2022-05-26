@@ -1,6 +1,7 @@
 package com.example.module3.controller;
 
 import com.example.module3.service.InvestorInstitutionalService;
+import com.example.trainingbase.dto.InvestorInstitutionalDto;
 import com.example.trainingbase.entity.crm.InvestorIndividual;
 import com.example.trainingbase.entity.crm.InvestorInstitutional;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +24,9 @@ public class InvestorInstitutionalController {
     public ResponseEntity<Object> saveInvestor(@RequestBody InvestorInstitutional req) {
         try {
             log.info("Start saving a new investor");
-            institutionalService.createInvestorInstitutional(req);
+            InvestorInstitutionalDto result = institutionalService.createInvestorInstitutional(req);
             log.info("Finish saving a new investor");
-            return new ResponseEntity<>(req, HttpStatus.OK);
+            return new ResponseEntity<>(result, HttpStatus.OK);
 
         } catch (Exception e) {
             log.error(e.getMessage());

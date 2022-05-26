@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface InvestorInstitutionalService {
-    void createInvestorInstitutional(InvestorInstitutional investor);
+    InvestorInstitutionalDto createInvestorInstitutional(InvestorInstitutional investor);
 
     InvestorInstitutionalDto findByInvestorId(String id);
 
