@@ -1,12 +1,12 @@
 package com.example.module3.controller;
 
+import com.example.module3.repository.InvestorIndividualRepository;
 import com.example.module3.service.InvestorIndividualService;
 import com.example.trainingbase.dto.InvestorIndividualDto;
 import com.example.trainingbase.entity.crm.InvestorIndividual;
 import com.example.trainingbase.mapper.InvestorIndividualMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class InvestorIndividualController {
         return new ResponseEntity<>(investorDto, HttpStatus.OK);
     }
 
-    @PostMapping("/save")
+    @PostMapping("/create")
     public ResponseEntity<Object> saveInvestor(@RequestBody InvestorIndividual req) {
         try {
             log.info("Start saving a new investor");
@@ -66,6 +66,15 @@ public class InvestorIndividualController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             InvestorIndividual newInvestor = investorIndividualMapper.dtoToInvestor(req);
+            newInvestor.setInvestorId(investorId);
+            newInvestor.setRmId(rmId);
+            newInvestor.setCreatedAt(currentInvestor.get().getCreatedAt());
+//            newInvestor.setUpdatedAt(currentInvestor.get().getUpdatedAt());
+            newInvestor.setCreatedBy(currentInvestor.get().getCreatedBy());
+//            newInvestor.setUpdatedBy(currentInvestor.get().getUpdatedBy());
+            newInvestor.setSid(currentInvestor.get().getSid());
+            newInvestor.setIfua(currentInvestor.get().getIfua());
+            newInvestor.setEngageOption(currentInvestor.get().getEngageOption());
             investorIndividualService.saveInvestorIndividual(newInvestor);
             log.info("finish updating investor information");
             return new ResponseEntity<>(investorId, HttpStatus.OK);
