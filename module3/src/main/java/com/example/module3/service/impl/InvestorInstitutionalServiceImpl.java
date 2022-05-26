@@ -11,14 +11,17 @@ import com.example.trainingbase.exceptions.BusinessException;
 import com.example.trainingbase.mapper.InvestorInstitutionalMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+@ComponentScan()
 @Service
 @Slf4j
 public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalService {
@@ -26,14 +29,14 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
     @Autowired
     private InvestorInstitutionalRepository institutionalRepository;
 
-//    @Autowired
-//    private InvestorInstitutionalMapper institutionalMapper;
+    @Autowired
+    private InvestorInstitutionalMapper institutionalMapper;
 
     @Autowired
     private JavaMailSender emailSender;
 
     @Override
-    public void createInvestorInstitutional(InvestorInstitutional investor) {
+    public InvestorInstitutionalDto createInvestorInstitutional(InvestorInstitutional investor) {
         Optional<InvestorInstitutional> currentInvestor = institutionalRepository.findByNpwpNo(investor.getNpwpNo());
         // validate npwp number
         if (currentInvestor.isPresent() && currentInvestor.get().getStatus().equals(ConstantDefault.APPROVED_STATUS)) {
@@ -61,6 +64,21 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
         }
 
         institutionalRepository.save(investor);
-//        return institutionalMapper.toDto(investor);
+        return institutionalMapper.toDto(investor);
+    }
+
+    @Override
+    public InvestorInstitutionalDto findByInvestorId(String id) {
+        if (institutionalRepository.findById(id).isPresent()){
+            InvestorInstitutional result = institutionalRepository.findById(id).get();
+            return institutionalMapper.toDto(result) ;
+        } else {
+            throw new BusinessException("404","Investor NOT found");
+        }
+    }
+
+    @Override
+    public List<InvestorInstitutional> getAllInvestors() {
+        return institutionalRepository.findAll();
     }
 }
