@@ -7,4 +7,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface InvestorIndividualMapper {
     InvestorIndividualDto investorToDto(InvestorIndividual investor);
+
+    InvestorIndividual dtoToInvestor(InvestorIndividualDto investorDto);
 }
