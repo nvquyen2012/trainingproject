@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface InvestorIndividualRepository extends JpaRepository<InvestorIndividual, String> {
     @Query("select i from InvestorIndividual i where i.identityNumberKTPNIK = :nikNumber")
     Optional<InvestorIndividual> findByNikNumber(@Param("nikNumber") String nikNumber);
+    Optional<InvestorIndividual> findInvestorIndividualByInvestorIdAndRmId(String id, Integer rmId);
 }
