@@ -63,4 +63,11 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
         institutionalRepository.save(investor);
 //        return institutionalMapper.toDto(investor);
     }
+
+    @Override
+    public Optional<InvestorInstitutional> getInvestorById(String id) {
+        return institutionalRepository.findById(id);
+    }
+
+
 }

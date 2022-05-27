@@ -7,7 +7,13 @@ import com.example.trainingbase.entity.crm.InvestorInstitutional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface InvestorService {
     List<InvestorStatusDto> getListInvestorByRmId(int rmId, String status);
+
+    InvestorStatusDto updateInvestorStatus(InvestorStatusDto investorStatusDto);
+
+    InvestorStatusDto sendMail(Object investorStatusDto);
+
 }
