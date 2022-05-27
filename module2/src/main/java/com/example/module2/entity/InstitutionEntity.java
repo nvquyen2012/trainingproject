@@ -1,5 +1,6 @@
 package com.example.module2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +18,9 @@ public class InstitutionEntity {
     private int id;
     private String name;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "institution_assetAllocation")
+    @JsonBackReference
     private AssetAllocationEntity assetAllocationEntity;
+
 }

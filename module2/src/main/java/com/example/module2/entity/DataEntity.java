@@ -21,7 +21,7 @@ public class DataEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private int id;
 
     @JsonProperty("isin_code")
     private String isinCode;
@@ -65,13 +65,13 @@ public class DataEntity {
 
     //Nav
     @JsonProperty("nav")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "data_nav")
     private NavEntity navEntity;
 
     //investmentManager
     @JsonProperty("investment_manager")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "data_investmentManager")
     private InstitutionEntity investmentManagerEntity;
 }

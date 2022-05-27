@@ -1,5 +1,6 @@
 package com.example.module2.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -25,10 +26,6 @@ public class AssetAllocationEntity {
 
     @JsonProperty("updated_at")
     private LocalDate updateAt;
-
-    //AssetAllocation-Data
-    @OneToMany(mappedBy = "assetAllocationEntity")
-    private List<DataEntity> dataEntities = new ArrayList<>();
 
     //AssetAllocation-Institution
     @OneToMany(mappedBy = "assetAllocationEntity")

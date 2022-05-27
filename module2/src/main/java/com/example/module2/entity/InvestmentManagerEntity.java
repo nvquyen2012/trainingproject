@@ -1,5 +1,6 @@
 package com.example.module2.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -19,15 +20,20 @@ public class InvestmentManagerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     private String code;
     private String name;
+
     @JsonProperty("full_name")
     private String fullName;
+
     @JsonProperty("icon_url")
     private String iconUrl;
+
     @JsonProperty("product_count")
     private int productCount;
 
     @OneToMany(mappedBy = "investmentManagerEntity")
+    @JsonManagedReference
     private List<DataEntity> dataEntities = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.example.module2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -21,8 +22,9 @@ public class ReturnInfoEntity {
     @JsonProperty("graph_text")
     private String graphText;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "returnInfo_data")
+    @JsonBackReference
     private DataEntity dataEntity;
 
 }

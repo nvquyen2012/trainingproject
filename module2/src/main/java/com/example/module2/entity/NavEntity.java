@@ -1,5 +1,6 @@
 package com.example.module2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,5 +24,6 @@ public class NavEntity {
     private BigDecimal value;
 
     @OneToMany(mappedBy = "navEntity")
+    @JsonBackReference
     private List<DataEntity> dataEntities = new ArrayList<>();
 }
