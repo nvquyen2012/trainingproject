@@ -10,5 +10,5 @@ public interface InvestorIndividualService {
 
     void saveInvestorIndividual(InvestorIndividual req);
 
-    Optional<InvestorIndividual> getInvestorById(String id);
+    Optional<InvestorIndividual> getInvestorByIdAndRmId(String id, Integer rmId);
 }
