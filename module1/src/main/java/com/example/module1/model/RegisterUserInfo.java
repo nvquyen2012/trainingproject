@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 
 @Data
 @AllArgsConstructor
-public class RegistrationRequestDTO {
+public class RegisterUserInfo {
     @NotBlank(message = "Email is mandatory")
     @NotEmpty(message = "Email is mandatory")
     private final String email;

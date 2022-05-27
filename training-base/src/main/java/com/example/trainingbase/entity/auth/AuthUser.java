@@ -1,6 +1,7 @@
 package com.example.trainingbase.entity.auth;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import java.util.Collections;
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
+@Slf4j
 public class AuthUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -89,6 +91,9 @@ public class AuthUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(EStatus.PENDING.name().equals(this.getStatus())){
+            return Collections.singletonList(new SimpleGrantedAuthority(ERoles.SALE_RM.name()));
+        }
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(this.getRole());
         return Collections.singletonList(authority);
     }

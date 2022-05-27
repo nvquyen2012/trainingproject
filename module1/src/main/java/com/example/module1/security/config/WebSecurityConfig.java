@@ -2,7 +2,8 @@ package com.example.module1.security.config;
 
 import com.example.module1.security.jwt.AuthEntryPointJwt;
 import com.example.module1.security.jwt.AuthTokenFilter;
-import com.example.module1.service.UserService;
+import com.example.module1.service.impl.UserDetailsServiceImpl;
+import com.example.trainingbase.entity.auth.ERoles;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
      */
 
-    private final UserService userService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private AuthEntryPointJwt unauthorizedHandler;
 
@@ -54,8 +55,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests()
-                .antMatchers(HttpMethod.POST,"/api/v1/auth/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/user/**").hasRole("S_ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/v1/auth/register").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/v1/auth/login").permitAll()
+                .antMatchers("/api/v1/user/**").hasAnyAuthority(
+                        ERoles.SUPER_ADMIN.name(),
+                        ERoles.SUPERVISOR.name(),
+                        ERoles.ADMIN_CHECKER.name(),
+                        ERoles.ADMIN_MAKER.name(),
+                        ERoles.ADMIN_VIEWER.name()
+                )
+                .antMatchers(HttpMethod.PUT, "/api/v1/admin/**").hasAnyAuthority(
+                        ERoles.SUPER_ADMIN.name(),
+                        ERoles.ADMIN_CHECKER.name(),
+                        ERoles.ADMIN_MAKER.name()
+                )
                 .anyRequest()
                 .authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -70,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder);
-        provider.setUserDetailsService(userService);
+        provider.setUserDetailsService(userDetailsServiceImpl);
         return provider;
     }
 

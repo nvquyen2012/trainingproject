@@ -1,6 +1,6 @@
-package com.example.module1.service;
+package com.example.module1.service.impl;
 
-import com.example.module1.model.RegistrationRequestDTO;
+import com.example.module1.model.RegisterUserInfo;
 import com.example.module1.security.EmailValidator;
 import com.example.trainingbase.entity.auth.AuthUser;
 import lombok.AllArgsConstructor;
@@ -12,8 +12,8 @@ import static com.example.trainingbase.constants.ConstantDefault.STATUS_NOT_OK;
 @AllArgsConstructor
 public class RegistrationService {
     private final EmailValidator emailValidator;
-    private final UserService userService;
-    public String register(RegistrationRequestDTO request) {
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
+    public String register(RegisterUserInfo request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail){
             throw new IllegalStateException(STATUS_NOT_OK);
@@ -21,7 +21,7 @@ public class RegistrationService {
         if(!(request.getPassword().equals(request.getRPassword()))){
             throw new IllegalStateException(STATUS_NOT_OK);
         }
-        return userService.signUpUser(new AuthUser(
+        return userDetailsServiceImpl.signUpUser(new AuthUser(
                 request.getFullName(),
                 request.getEmail(),
                 request.getPassword(),

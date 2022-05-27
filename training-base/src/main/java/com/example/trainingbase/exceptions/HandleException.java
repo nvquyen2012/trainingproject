@@ -29,18 +29,6 @@ public class HandleException {
         return response;
     }
 
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex){
-//        Map<String, String> errors = new HashMap<>();
-//        ex.getBindingResult().getAllErrors().forEach((error) -> {
-//            String fieldName = ((FieldError) error).getField();
-//            String errorMessage = error.getDefaultMessage();
-//            errors.put(fieldName, errorMessage);
-//        });
-//        return errors;
-//    }
-
-
     @ExceptionHandler({IllegalStateException.class})
     public BibResponse handleIllegalException(IllegalStateException illegalStateException) {
         log.error("IllegalStateException => rootCause: {}", Arrays.stream(illegalStateException.getStackTrace()).findFirst());
