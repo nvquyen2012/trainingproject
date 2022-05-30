@@ -29,7 +29,6 @@ public class RegisterUserInfo {
     @NotEmpty(message = "Role is mandatory")
     private final String roles;
 
-    //TODO: password validation
     @NotBlank(message = "Password is mandatory")
     @NotEmpty(message = "Password is mandatory")
     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$")
@@ -38,6 +37,5 @@ public class RegisterUserInfo {
     @NotBlank(message = "Repeat your password")
     @NotEmpty(message = "Repeat your password")
     private final String rPassword;
-
 
 }

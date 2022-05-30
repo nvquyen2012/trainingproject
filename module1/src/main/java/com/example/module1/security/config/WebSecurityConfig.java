@@ -57,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()
                 .antMatchers(HttpMethod.POST,"/api/v1/auth/register").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/v1/auth/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/auth/refreshtoken").permitAll()
                 .antMatchers("/api/v1/user/**").hasAnyAuthority(
                         ERoles.SUPER_ADMIN.name(),
                         ERoles.SUPERVISOR.name(),

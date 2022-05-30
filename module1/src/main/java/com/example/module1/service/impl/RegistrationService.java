@@ -2,6 +2,7 @@ package com.example.module1.service.impl;
 
 import com.example.module1.model.RegisterUserInfo;
 import com.example.module1.security.EmailValidator;
+import com.example.module1.service.UserService;
 import com.example.trainingbase.entity.auth.AuthUser;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import static com.example.trainingbase.constants.ConstantDefault.STATUS_NOT_OK;
 @AllArgsConstructor
 public class RegistrationService {
     private final EmailValidator emailValidator;
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final UserService userService;
     public String register(RegisterUserInfo request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail){
@@ -21,7 +22,7 @@ public class RegistrationService {
         if(!(request.getPassword().equals(request.getRPassword()))){
             throw new IllegalStateException(STATUS_NOT_OK);
         }
-        return userDetailsServiceImpl.signUpUser(new AuthUser(
+        return userService.signUpUser(new AuthUser(
                 request.getFullName(),
                 request.getEmail(),
                 request.getPassword(),

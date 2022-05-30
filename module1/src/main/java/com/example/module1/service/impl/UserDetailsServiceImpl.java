@@ -8,6 +8,7 @@ import com.example.trainingbase.entity.auth.AuthUser;
 import com.example.trainingbase.entity.auth.ERoles;
 import com.example.trainingbase.entity.auth.EStatus;
 import com.example.trainingbase.exceptions.BusinessException;
+import com.example.trainingbase.payload.BibResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,7 +49,6 @@ public class UserDetailsServiceImpl implements UserService {
         String encodedPassword = bCryptPasswordEncoder.encode(authUser.getPassword());
         authUser.setPassword(encodedPassword);
         authUser.setStatus(EStatus.PENDING.name());
-//        authUser.setAuthorities(ERoles.SALE_RM);
         userRepository.save(authUser);
         //TODO: send confirmation token
         return "";
@@ -88,52 +88,34 @@ public class UserDetailsServiceImpl implements UserService {
     }
     @Override
     @Transactional
-    public void updateUserById(Integer id, RegisterUserInfo registerUserInfo) {
-        AuthUser temp = userRepository.findById(id).orElseThrow(
-                () -> new BusinessException(HttpStatusConstants.INVALID_USER_ID_CODE, HttpStatusConstants.INVALID_USER_ID_MESSAGE)
-        );
-        temp.setEmail(registerUserInfo.getEmail());
-        temp.setPhoneNumber(registerUserInfo.getPhoneNumber());
-        temp.setFullName(registerUserInfo.getFullName());
-    }
-
-    @Override
-    @Transactional
-    public void updateUserRoleById(Integer id, String role) {
-        AuthUser temp = userRepository.findById(id).orElseThrow(
-                () -> new BusinessException(HttpStatusConstants.INVALID_USER_ID_CODE, HttpStatusConstants.INVALID_USER_ID_MESSAGE)
-        );
-        temp.setRole(role);
-    }
-
-    @Override
-    @Transactional
-    public void updateUserCompanyById(Integer id, Integer companyId) {
-        AuthUser temp = userRepository.findById(id).orElseThrow(
-                () -> new BusinessException(HttpStatusConstants.INVALID_USER_ID_CODE, HttpStatusConstants.INVALID_USER_ID_MESSAGE)
-        );
-        temp.setCompanyId(companyId);
-    }
-
-    @Override
-    @Transactional
-    public void verifyUser(Integer id, String decision) {
+    public BibResponse updateUserById(Integer id, RegisterUserInfo registerUserInfo) {
         AuthUser authUser = userRepository.findById(id).orElseThrow(
                 () -> new BusinessException(HttpStatusConstants.INVALID_USER_ID_CODE, HttpStatusConstants.INVALID_USER_ID_MESSAGE)
         );
-        if(!authUser.getStatus().equals(EStatus.PENDING.name())){
-            throw new BusinessException(HttpStatusConstants.STATUS_INVALID_CODE, HttpStatusConstants.STATUS_INVALID_MESSAGE);
-        }
-        authUser.setStatus(decision);
+        authUser.setEmail(registerUserInfo.getEmail());
+        authUser.setPhoneNumber(registerUserInfo.getPhoneNumber());
+        authUser.setFullName(registerUserInfo.getFullName());
+        return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE, authUser);
     }
-    @Transactional
-    public void verifyLogin(RegisterUserInfo request) {
-        AuthUser authUser = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new BusinessException(HttpStatusConstants.EMAIL_NOT_EXISTS_CODE, HttpStatusConstants.EMAIL_NOT_EXISTS_MESSAGE)
-        );
-        if(EStatus.REJECTED.name().equals(authUser.getStatus())){
-            throw new BusinessException(HttpStatusConstants.STATUS_INVALID_CODE, HttpStatusConstants.STATUS_INVALID_MESSAGE);
-        }
 
+    @Override
+    @Transactional
+    public BibResponse updateUserRoleById(Integer id, String role) {
+        AuthUser authUser = userRepository.findById(id).orElseThrow(
+                () -> new BusinessException(HttpStatusConstants.INVALID_USER_ID_CODE, HttpStatusConstants.INVALID_USER_ID_MESSAGE)
+        );
+        authUser.setRole(role);
+        return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE, authUser);
     }
+
+    @Override
+    @Transactional
+    public BibResponse updateUserCompanyById(Integer id, Integer companyId) {
+        AuthUser authUser = userRepository.findById(id).orElseThrow(
+                () -> new BusinessException(HttpStatusConstants.INVALID_USER_ID_CODE, HttpStatusConstants.INVALID_USER_ID_MESSAGE)
+        );
+        authUser.setCompanyId(companyId);
+        return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE, authUser);
+    }
+
 }
