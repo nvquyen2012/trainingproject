@@ -37,14 +37,14 @@ public class InvestorController {
     }
 
     @PutMapping("/updateInvestorStatus")
-    public ResponseEntity<Object> updateStudent(@RequestBody InvestorStatusDto req) {
+    public ResponseEntity<Object> updateStudent(@RequestParam Integer rmId,@RequestBody InvestorStatusDto req) {
         try {
             Optional<InvestorIndividual> currentInvestorIndividual = investorIndividualService.getInvestorById(req.getInvestorId());
             Optional<InvestorInstitutional> currentInvestorInstitutional = institutionalService.getInvestorById(req.getInvestorId());
             if (!currentInvestorIndividual.isPresent() && !currentInvestorInstitutional.isPresent()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            InvestorStatusDto updated = investorService.updateInvestorStatus(req);
+            InvestorStatusDto updated = investorService.updateInvestorStatus(rmId,req);
             return new ResponseEntity<>(updated, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

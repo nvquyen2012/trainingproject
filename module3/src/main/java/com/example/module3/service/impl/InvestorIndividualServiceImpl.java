@@ -1,7 +1,9 @@
 package com.example.module3.service.impl;
 
+import com.example.module3.config.EmailConfig;
 import com.example.module3.repository.InvestorIndividualRepository;
 import com.example.module3.service.InvestorIndividualService;
+import com.example.module3.util.MailSenderService;
 import com.example.trainingbase.constants.ConstantDefault;
 import com.example.trainingbase.constants.RegexConstant;
 import com.example.trainingbase.entity.crm.InvestorIndividual;
@@ -14,6 +16,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Entity;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,7 +29,9 @@ public class InvestorIndividualServiceImpl implements InvestorIndividualService 
     private InvestorIndividualRepository investorIndividualRepository;
 
     @Autowired
-    private JavaMailSender emailSender;
+    private MailSenderService sendMail;
+
+    private EmailConfig emailConfig;
 
     @Override
     public List<InvestorIndividual> getListInvestorIndividual() {
@@ -38,17 +43,10 @@ public class InvestorIndividualServiceImpl implements InvestorIndividualService 
         try {
             isValidReq(req);
             if (Objects.equals(req.getEngageOption(), EngageOption.REMOTE.getValue())) {
-                SimpleMailMessage message = new SimpleMailMessage();
-                message.setFrom("buiducthinh2502@gmail.com");
-                message.setTo(req.getEmail());
-                message.setSubject("BIB - Complete your registration!!");
-                message.setText("To confirm your account please click here: " +
-                        "http://localhost:8080/confirm-account?uuid=" + req.getInvestorId());
-                log.info("Start sending the information by email...");
-                emailSender.send(message);
-                log.info("mail sent successful!");
+                String subj = "BIB - Complete your registration!\nTo confirm your account please click here: " +
+                        "http://localhost:8080/confirm-account?uuid=" + req.getInvestorId();
+                sendMail(req.getEmail(), subj);
             }
-
             investorIndividualRepository.save(req);
         } catch (BusinessException ex) {
             throw new BusinessException(ex.getCode(), ex.getMessage());
@@ -56,11 +54,19 @@ public class InvestorIndividualServiceImpl implements InvestorIndividualService 
     }
 
     @Override
+    public void sendMail(String to, String subj) {
+        emailConfig = new EmailConfig();
+        emailConfig.setTo(to);
+        emailConfig.setContent(subj);
+        sendMail.sendEmail(emailConfig);
+    }
+
+    @Override
     public Optional<InvestorIndividual> getInvestorById(String id) {
         return investorIndividualRepository.findById(id);
     }
 
-    public void isValidReq(InvestorIndividual req) {
+    private void isValidReq(InvestorIndividual req) {
         Optional<InvestorIndividual> currentInvestor = investorIndividualRepository.findByNikNumber(req.getIdentityNumberKTPNIK());
         // validate nik number
         if (currentInvestor.isPresent() && currentInvestor.get().getStatus().equals(ConstantDefault.APPROVED_STATUS)) {

@@ -11,4 +11,6 @@ public interface InvestorIndividualService {
     void saveInvestorIndividual(InvestorIndividual req);
 
     Optional<InvestorIndividual> getInvestorById(String id);
+
+    void sendMail(String to, String subj);
 }

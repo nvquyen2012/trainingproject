@@ -12,8 +12,8 @@ import java.util.Optional;
 public interface InvestorService {
     List<InvestorStatusDto> getListInvestorByRmId(int rmId, String status);
 
-    InvestorStatusDto updateInvestorStatus(InvestorStatusDto investorStatusDto);
-
-    InvestorStatusDto sendMail(Object investorStatusDto);
+    // get list investor by rmId
+    // update investor by investor id and rmId
+    InvestorStatusDto updateInvestorStatus(int rmId, InvestorStatusDto investorStatusDto);
 
 }

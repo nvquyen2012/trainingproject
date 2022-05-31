@@ -1,6 +1,7 @@
 package com.example.module3.repository;
 import com.example.trainingbase.entity.crm.InvestorIndividual;
 import com.example.trainingbase.entity.crm.InvestorInstitutional;
+import jdk.nashorn.internal.runtime.options.Option;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,4 +14,5 @@ public interface InvestorIndividualRepository extends JpaRepository<InvestorIndi
     Optional<InvestorIndividual> findByNikNumber(@Param("nikNumber") String nikNumber);
     List<InvestorIndividual> findInvestorIndividualsByRmIdAndStatus(int rmId, String status);
     List<InvestorIndividual> findInvestorIndividualsByRmId(int rmId);
+    Optional<InvestorIndividual> findInvestorIndividualsByRmIdAndInvestorId(int rmId, String investorId);
 }
