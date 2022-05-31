@@ -81,4 +81,11 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
     public List<InvestorInstitutional> getAllInvestors() {
         return institutionalRepository.findAll();
     }
+
+    @Override
+    public Optional<InvestorInstitutional> getInvestorById(String id) {
+        return institutionalRepository.findById(id);
+    }
+
+
 }
