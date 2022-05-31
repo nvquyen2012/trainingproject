@@ -2,6 +2,8 @@ package com.example.module1.security.jwt;
 
 import com.example.module1.service.UserService;
 import com.example.module1.service.impl.UserDetailsServiceImpl;
+import com.example.trainingbase.constants.HttpStatusConstants;
+import com.example.trainingbase.exceptions.BusinessException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
@@ -27,7 +29,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
     @Autowired
     private UserService userService;
-    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -42,7 +43,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            throw new BusinessException(HttpStatusConstants.UNAUTHORIZED_CODE, HttpStatusConstants.UNAUTHORIZED_MESSAGE);
         }
         filterChain.doFilter(request, response);
     }

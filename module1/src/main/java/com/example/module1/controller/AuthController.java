@@ -11,6 +11,7 @@ import com.example.module1.service.impl.RegistrationService;
 import com.example.trainingbase.constants.HttpStatusConstants;
 import com.example.trainingbase.entity.auth.AuthUser;
 import com.example.trainingbase.entity.auth.RefreshToken;
+import com.example.trainingbase.exceptions.BusinessException;
 import com.example.trainingbase.payload.BibResponse;
 import com.example.module1.payload.JwtResponse;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1/auth")
@@ -47,7 +49,8 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        //authentication.getPrincipal()
+        String jwt = jwtUtils.generateJwtToken(authUser.getEmail());
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(authUser.getId());
         return new JwtResponse(jwt,refreshToken.getToken(), authUser.getEmail(), authUser.getRole());
     }
@@ -59,12 +62,11 @@ public class AuthController {
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getAuthUser)
                 .map(authUser -> {
-                    Authentication authentication = authenticationManager.authenticate(
-                            new UsernamePasswordAuthenticationToken(authUser.getEmail(), authUser.getPassword()));
-                    String token = jwtUtils.generateJwtToken(authentication);
-                    return new JwtResponse(token, requestRefreshToken);
+                    RefreshToken refreshToken = refreshTokenService.createRefreshToken(authUser.getId());
+                    String token = jwtUtils.generateJwtToken(authUser.getEmail());
+                    return new JwtResponse(token, refreshToken.getToken());
                 }).orElseThrow(
-                        () -> new IllegalStateException()
+                        () -> new BusinessException(HttpStatusConstants.UNAUTHORIZED_CODE, HttpStatusConstants.UNAUTHORIZED_MESSAGE)
                 );
     }
 }

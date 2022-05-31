@@ -3,7 +3,9 @@ package com.example.module1.service.impl;
 import com.example.module1.model.RegisterUserInfo;
 import com.example.module1.security.EmailValidator;
 import com.example.module1.service.UserService;
+import com.example.trainingbase.constants.HttpStatusConstants;
 import com.example.trainingbase.entity.auth.AuthUser;
+import com.example.trainingbase.exceptions.BusinessException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +19,10 @@ public class RegistrationService {
     public String register(RegisterUserInfo request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail){
-            throw new IllegalStateException(STATUS_NOT_OK);
+            throw new BusinessException(HttpStatusConstants.EMAIL_EXIST_CODE, HttpStatusConstants.EMAIL_EXIST_MESSAGE);
         }
         if(!(request.getPassword().equals(request.getRPassword()))){
-            throw new IllegalStateException(STATUS_NOT_OK);
+            throw new BusinessException(HttpStatusConstants.INVALID_PASSWORD_CODE, HttpStatusConstants.INVALID_PASSWORD_MESSAGE);
         }
         return userService.signUpUser(new AuthUser(
                 request.getFullName(),

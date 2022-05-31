@@ -8,19 +8,21 @@ import lombok.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     private String jwtSecret = "MySecretKey";
-    private int jwtExpirationMs = 10000;
+    private int jwtExpirationMs = 1000000;
 
 
-    public String generateJwtToken(Authentication authentication) {
-        AuthUser userPrincipal = (AuthUser) authentication.getPrincipal();
+    public String generateJwtToken(String email) {
+//        AuthUser userPrincipal = (AuthUser) authentication.getPrincipal();
         return Jwts.builder()
-                .setSubject((userPrincipal.getEmail()))
+//                .setSubject((userPrincipal.getEmail()))
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

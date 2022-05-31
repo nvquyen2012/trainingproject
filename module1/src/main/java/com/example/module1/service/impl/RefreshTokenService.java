@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Service
 public class RefreshTokenService {
-    private Integer refreshTokenDurationMs = 600000;
+    private Integer refreshTokenDurationMs = 6000000;
     @Autowired
     private RefreshTokenRepository repository;
     @Autowired
