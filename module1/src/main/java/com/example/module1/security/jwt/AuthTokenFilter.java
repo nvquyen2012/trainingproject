@@ -43,7 +43,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            throw new BusinessException(HttpStatusConstants.UNAUTHORIZED_CODE, HttpStatusConstants.UNAUTHORIZED_MESSAGE);
+            throw new BusinessException(HttpStatusConstants.INVALID_DATA_CODE, "Not Authenticated");
         }
         filterChain.doFilter(request, response);
     }

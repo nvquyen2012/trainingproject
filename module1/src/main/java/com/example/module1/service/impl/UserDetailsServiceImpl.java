@@ -1,10 +1,12 @@
 package com.example.module1.service.impl;
 
 import com.example.module1.model.RegisterUserInfo;
+import com.example.module1.repository.ConfirmationTokenRepository;
 import com.example.module1.repository.UserRepository;
 import com.example.module1.service.UserService;
 import com.example.trainingbase.constants.HttpStatusConstants;
 import com.example.trainingbase.entity.auth.AuthUser;
+import com.example.trainingbase.entity.auth.ConfirmationToken;
 import com.example.trainingbase.entity.auth.ERoles;
 import com.example.trainingbase.entity.auth.EStatus;
 import com.example.trainingbase.exceptions.BusinessException;
@@ -16,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +27,7 @@ public class UserDetailsServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -48,10 +53,14 @@ public class UserDetailsServiceImpl implements UserService {
         }
         String encodedPassword = bCryptPasswordEncoder.encode(authUser.getPassword());
         authUser.setPassword(encodedPassword);
-        authUser.setStatus(EStatus.PENDING.name());
+        authUser.setStatus(EStatus.INACTIVE.name());
         userRepository.save(authUser);
-        //TODO: send confirmation token
-        return "";
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(),
+                                                                    LocalDateTime.now().plusMinutes(60),
+                                                                    authUser);
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        return token;
     }
 
     @Override

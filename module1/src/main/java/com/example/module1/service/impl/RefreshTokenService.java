@@ -7,6 +7,7 @@ import com.example.trainingbase.entity.auth.AuthUser;
 import com.example.trainingbase.entity.auth.RefreshToken;
 import com.example.trainingbase.exceptions.BusinessException;
 import com.example.trainingbase.payload.BibResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +17,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class RefreshTokenService {
-    private Integer refreshTokenDurationMs = 6000000;
-    @Autowired
-    private RefreshTokenRepository repository;
-    @Autowired
-    private UserRepository userRepository;
+    private final Integer refreshTokenDurationMs = 6000000;
+    private final RefreshTokenRepository repository;
+    private final UserRepository userRepository;
 
     public Optional<RefreshToken> findByToken(String token){
         return repository.findByToken(token);
@@ -30,7 +30,7 @@ public class RefreshTokenService {
     public RefreshToken createRefreshToken(Integer id){
         AuthUser authUser = userRepository.findById(id).orElseThrow(
                 () -> new BusinessException(HttpStatusConstants.INVALID_USER_ID_CODE,
-                                            HttpStatusConstants.INVALID_USER_ID_MESSAGE)
+                                            "User not existed")
         );
         RefreshToken refreshToken = new RefreshToken(authUser,
                 UUID.randomUUID().toString(),Instant.now().plusMillis(refreshTokenDurationMs));
@@ -41,7 +41,8 @@ public class RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken token){
         if(token.getExpiryDate().compareTo(Instant.now()) < 0){
             repository.delete(token);
-            throw new BusinessException(HttpStatusConstants.REFRESH_TOKEN_EXPIRED_CODE, HttpStatusConstants.REFRESH_TOKEN_EXPIRED_MESSAGE);
+            throw new BusinessException(HttpStatusConstants.REFRESH_TOKEN_EXPIRED_CODE,
+                    "Token is expired");
         }
         return token;
     }

@@ -20,17 +20,17 @@ import javax.transaction.Transactional;
 @Service
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
-    private UserRepository userRepository;
-    private BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public BibResponse verifyUser(Integer id, String decision) {
         AuthUser authUser = userRepository.findById(id).orElseThrow(
-                () -> new BusinessException(HttpStatusConstants.INVALID_USER_ID_CODE, HttpStatusConstants.INVALID_USER_ID_MESSAGE)
+                () -> new BusinessException(HttpStatusConstants.INVALID_USER_ID_CODE, "Invalid User Id")
         );
         if(!authUser.getStatus().equals(EStatus.PENDING.name())){
-            throw new BusinessException(HttpStatusConstants.STATUS_INVALID_CODE, HttpStatusConstants.STATUS_INVALID_MESSAGE);
+            throw new BusinessException(HttpStatusConstants.STATUS_INVALID_CODE, "User already verified");
         }
         authUser.setStatus(decision);
         return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE, authUser);
@@ -39,10 +39,10 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void verifyLogin(LoginUserInfo request) {
         AuthUser authUser = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new BusinessException(HttpStatusConstants.EMAIL_NOT_EXISTS_CODE, HttpStatusConstants.EMAIL_NOT_EXISTS_MESSAGE)
+                () -> new BusinessException(HttpStatusConstants.EMAIL_NOT_EXISTS_CODE, "Email not existed")
         );
-        if(EStatus.REJECTED.name().equals(authUser.getStatus())){
-            throw new BusinessException(HttpStatusConstants.STATUS_INVALID_CODE, HttpStatusConstants.STATUS_INVALID_MESSAGE);
+        if(EStatus.REJECTED.name().equals(authUser.getStatus()) || EStatus.INACTIVE.name().equals(authUser.getStatus())){
+            throw new BusinessException(HttpStatusConstants.STATUS_INVALID_CODE, "Account is rejected or inactive");
         }
     }
 }
