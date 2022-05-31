@@ -8,4 +8,7 @@ import org.mapstruct.Mapper;
 public interface InvestorInstitutionalMapper {
 
     InvestorInstitutionalDto toDto(InvestorInstitutional investor);
+
+    InvestorInstitutional toEntity(InvestorInstitutionalDto investorDto);
+
 }
