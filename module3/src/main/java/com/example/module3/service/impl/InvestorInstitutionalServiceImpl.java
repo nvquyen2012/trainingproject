@@ -1,5 +1,6 @@
 package com.example.module3.service.impl;
 
+import com.example.module3.config.EmailConfig;
 import com.example.module3.repository.InvestorInstitutionalRepository;
 import com.example.module3.service.InvestorInstitutionalService;
 import com.example.module3.util.MailSenderService;
@@ -22,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-@ComponentScan()
+
 @Service
 @Slf4j
 public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalService {
@@ -37,7 +38,7 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
     private MailSenderService emailSender;
 
     @Override
-    public InvestorInstitutionalDto createInvestorInstitutional(InvestorInstitutional investor) {
+    public void createInvestorInstitutional(InvestorInstitutional investor) {
         Optional<InvestorInstitutional> currentInvestor = institutionalRepository.findByNpwpNo(investor.getNpwpNo());
         // validate npwp number
         if (currentInvestor.isPresent() && currentInvestor.get().getStatus().equals(ConstantDefault.APPROVED_STATUS)) {
@@ -52,29 +53,26 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
             throw new BusinessException("403", "This identify is not valid");
         }
 
-        if (Objects.equals(investor.getEngageOption(), EngageOption.REMOTE.getValue())) {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("buiducthinh2502@gmail.com");
-            message.setTo(investor.getEmail());
-            message.setSubject("BIB - Complete your registration!!");
-            message.setText("To confirm your account please click here: " +
-                    "http://localhost:8080/confirm-account?uuid=" + investor.getInvestorId());
-            log.info("Start sending the information by email...");
-//            emailSender.sendEmail(message);
-            log.info("mail sent successful!");
-        }
+//        if (Objects.equals(investor.getEngageOption(), EngageOption.REMOTE.getValue())) {
+        EmailConfig message = new EmailConfig();
+        message.setTo(investor.getEmail());
+        message.setSubject("BIB - Complete your registration!!");
+//            message.setText("To confirm your account please click here: " +
+//                    "http://localhost:8080/confirum-account?uuid=" + investor.getInvestorId());
+        log.info("Start sending the information by email...");
+        emailSender.sendEmail(message, institutionalMapper.toDto(investor));
+        log.info("mail sent successful!");
 
-        institutionalRepository.save(investor);
-        return institutionalMapper.toDto(investor);
+//        institutionalRepository.save(investor);
     }
 
     @Override
     public InvestorInstitutionalDto findByInvestorId(String id) {
-        if (institutionalRepository.findById(id).isPresent()){
+        if (institutionalRepository.findById(id).isPresent()) {
             InvestorInstitutional result = institutionalRepository.findById(id).get();
-            return institutionalMapper.toDto(result) ;
+            return institutionalMapper.toDto(result);
         } else {
-            throw new BusinessException("404","Investor NOT found");
+            throw new BusinessException("404", "Investor NOT found");
         }
     }
 

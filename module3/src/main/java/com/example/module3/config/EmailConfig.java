@@ -11,5 +11,5 @@ public class EmailConfig {
     String to;
 //    String from;
     String subject;
-    String content;
+//    String content;
 }
