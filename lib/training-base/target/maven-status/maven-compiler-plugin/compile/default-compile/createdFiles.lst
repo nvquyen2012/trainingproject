@@ -34,6 +34,7 @@ com\example\trainingbase\entity\auth\AuthLoginLog.class
 com\example\trainingbase\entity\crm\enums\PoliticallyExposedPersons.class
 com\example\trainingbase\entity\crm\Country.class
 com\example\trainingbase\constants\HttpStatusConstants.class
+com\example\trainingbase\entity\auth\AuthUserRole.class
 com\example\trainingbase\entity\crm\enums\Gender.class
 com\example\trainingbase\entity\auth\AuthCompany.class
 com\example\trainingbase\entity\crm\enums\ApprovalType.class

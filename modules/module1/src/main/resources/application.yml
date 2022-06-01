@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bib
+    username: postgres
+    password: tung123
+    show-sql: true
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  hibernate:
+    ddl-auto: update
+
+server:
+  error:
+    include-message: always
+
+#eureka:
+#  client:
+#    enabled: false
