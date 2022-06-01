@@ -37,7 +37,16 @@ public interface UserRepository extends JpaRepository<AuthUser, Integer> {
 
     @Modifying
     @Query("UPDATE AuthUser a " +
+            "SET a.password =:password " +
+            "WHERE a.id =:id")
+    void setPassword(@Param("id") Integer id,
+                   @Param("password") String password);
+
+    @Modifying
+    @Query("UPDATE AuthUser a " +
             "SET a.loginFailCount = 0 " +
             "WHERE a.id =:id")
     void resetLoginFailCount(@Param("id") Integer id);
+
+
 }

@@ -1,44 +1,43 @@
 package com.example.module1.controller;
 
-import com.example.trainingbase.entity.auth.ConfirmationToken;
-import com.example.module1.model.LoginUserInfo;
-import com.example.module1.model.RegisterUserInfo;
-import com.example.module1.model.TokenRefreshInfo;
-import com.example.module1.repository.UserRepository;
+import com.example.module1.dto.LoginUserInfo;
+import com.example.module1.dto.PasswordResetInfo;
+import com.example.module1.dto.RegisterUserInfo;
+import com.example.module1.dto.TokenRefreshInfo;
 import com.example.module1.security.jwt.JwtUtils;
 import com.example.module1.service.AuthService;
 import com.example.module1.service.EmailService;
-import com.example.module1.service.impl.RefreshTokenService;
-import com.example.module1.service.impl.RegistrationService;
+import com.example.module1.service.impl.authentication.RefreshTokenService;
+import com.example.module1.service.impl.registration.ConfirmationTokenService;
+import com.example.module1.service.impl.registration.RegistrationService;
 import com.example.trainingbase.constants.HttpStatusConstants;
 import com.example.trainingbase.entity.auth.AuthUser;
+import com.example.trainingbase.entity.auth.ConfirmationToken;
 import com.example.trainingbase.entity.auth.RefreshToken;
 import com.example.trainingbase.exceptions.BusinessException;
 import com.example.trainingbase.payload.BibResponse;
 import com.example.module1.payload.JwtResponse;
 import freemarker.template.TemplateException;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/v1/auth")
 @AllArgsConstructor
 public class AuthController {
     private final RegistrationService registrationService;
+    private final ConfirmationTokenService confirmationTokenService;
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
     private final EmailService emailService;
     private final JwtUtils jwtUtils;
 
-    //TODO: Logging user information
     @PostMapping(value = "/register")
     public BibResponse register(@RequestBody @Valid RegisterUserInfo request) throws MessagingException, TemplateException, IOException {
         String token = registrationService.register(request);
@@ -69,7 +68,21 @@ public class AuthController {
 
     @GetMapping("/confirm")
     public BibResponse confirm(@RequestParam("token") String token){
-        registrationService.confirmToken(token);
-        return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE, "confirmed");
+        AuthUser authUser = confirmationTokenService.confirmToken(token);
+        return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE, authUser);
+    }
+
+    @GetMapping("/reset")
+    public BibResponse resetPasswordOtp(@RequestParam("email") String email) throws MessagingException, TemplateException, IOException {
+        String otp = authService.generateOTP(email);
+        emailService.sendMail(otp);
+        return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE,email);
+    }
+
+    @PostMapping("/resetpassword")
+    public BibResponse resetPassword(@RequestBody @Valid PasswordResetInfo resetInfo) {
+        AuthUser authUser = confirmationTokenService.confirmToken(resetInfo.getToken());
+        authService.updatePassword(authUser, resetInfo.getPassword());
+        return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE,authUser);
     }
 }

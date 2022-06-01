@@ -1,4 +1,4 @@
-package com.example.module1.service.impl;
+package com.example.module1.service.impl.authentication;
 
 import com.example.module1.repository.RefreshTokenRepository;
 import com.example.module1.repository.UserRepository;

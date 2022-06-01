@@ -1,13 +1,15 @@
-package com.example.module1.service.impl;
+package com.example.module1.service.impl.authentication;
 
-import com.example.module1.model.LoginUserInfo;
+import com.example.module1.dto.LoginUserInfo;
 import com.example.module1.payload.JwtResponse;
 import com.example.module1.repository.UserRepository;
 import com.example.module1.security.jwt.JwtUtils;
 import com.example.module1.service.AuthService;
+import com.example.module1.service.impl.LoginInfoService;
+import com.example.module1.service.impl.registration.ConfirmationTokenService;
 import com.example.trainingbase.constants.HttpStatusConstants;
-import com.example.trainingbase.entity.auth.AuthLoginLog;
 import com.example.trainingbase.entity.auth.AuthUser;
+import com.example.trainingbase.entity.auth.ConfirmationToken;
 import com.example.trainingbase.entity.auth.EStatus;
 import com.example.trainingbase.entity.auth.RefreshToken;
 import com.example.trainingbase.exceptions.BusinessException;
@@ -21,6 +23,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -31,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final RefreshTokenService refreshTokenService;
+    private final ConfirmationTokenService confirmationTokenService;
 
     @Override
     @Transactional
@@ -44,7 +49,9 @@ public class AuthServiceImpl implements AuthService {
         authUser.setStatus(decision);
         return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE, authUser);
     }
+
     @Override
+    @Transactional
     public JwtResponse verifyLogin(LoginUserInfo request) {
         AuthUser authUser = userRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new BusinessException(HttpStatusConstants.EMAIL_NOT_EXISTS_CODE, "Email not existed")
@@ -52,6 +59,8 @@ public class AuthServiceImpl implements AuthService {
         if (authUser.getLoginFailCount() > 3) {
             loginInfoService.saveFailedLog(authUser);
             userRepository.setStatus(authUser.getId(), EStatus.REJECTED.name());
+            throw new BusinessException(HttpStatusConstants.INVALID_PASSWORD_CODE, "Exceeds password limit count, account" +
+                    "rejected. Please contact the admin");
         }
         if(!passwordEncoder.matches(request.getPassword(), authUser.getPassword())){
             userRepository.saveFailedLogin(authUser.getId(), authUser.getLoginFailCount()+1);
@@ -69,5 +78,27 @@ public class AuthServiceImpl implements AuthService {
         loginInfoService.saveSuccessfulLog(authUser);
         userRepository.resetLoginFailCount(authUser.getId());
         return new JwtResponse(jwt,refreshToken.getToken(), authUser.getEmail(), authUser.getRole());
+    }
+
+    @Override
+    public String generateOTP(String email){
+        AuthUser authUser = userRepository.findByEmail(email).orElseThrow(
+                () -> new BusinessException(HttpStatusConstants.EMAIL_NOT_EXISTS_CODE,
+                        HttpStatusConstants.EMAIL_NOT_EXISTS_MESSAGE)
+        );
+        String token = UUID.randomUUID().toString();
+        String otp = token.substring(0,4);
+        ConfirmationToken confirmationToken = new ConfirmationToken(otp, LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(10),
+                authUser);
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        return otp;
+    }
+
+    @Override
+    @Transactional
+    public void updatePassword(AuthUser authUser, String password) {
+        String hash = passwordEncoder.encode(password);
+        userRepository.setPassword(authUser.getId(), hash);
     }
 }

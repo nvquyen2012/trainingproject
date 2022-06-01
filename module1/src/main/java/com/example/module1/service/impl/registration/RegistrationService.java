@@ -1,6 +1,6 @@
-package com.example.module1.service.impl;
+package com.example.module1.service.impl.registration;
 
-import com.example.module1.model.RegisterUserInfo;
+import com.example.module1.dto.RegisterUserInfo;
 import com.example.module1.repository.ConfirmationTokenRepository;
 import com.example.module1.security.EmailValidator;
 import com.example.module1.service.UserService;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 import java.time.LocalDateTime;
-
-import static com.example.trainingbase.constants.ConstantDefault.STATUS_NOT_OK;
 
 @Service
 @AllArgsConstructor
@@ -40,23 +38,5 @@ public class RegistrationService {
                 request.getRoles(),
                 request.getCompanyId()
         ));
-    }
-
-    @Transactional
-    public void confirmToken(String token){
-        ConfirmationToken confirmationToken = confirmationTokenRepository.findByToken(token).orElseThrow(
-                () -> new BusinessException(HttpStatusConstants.INVALID_DATA_CODE, "There is no confirmation token")
-        );
-        if(confirmationToken.getConfirmedAt() != null){
-            throw new BusinessException(HttpStatusConstants.INVALID_DATA_CODE, "Token already confirmed");
-        }
-
-        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
-
-        if(expiredAt.isBefore(LocalDateTime.now())){
-            throw new BusinessException(HttpStatusConstants.INVALID_DATA_CODE, "Token already expired");
-        }
-        confirmationToken.getAuthUser().setStatus(EStatus.PENDING.name());
-        confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
     }
 }

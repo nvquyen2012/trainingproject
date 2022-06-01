@@ -63,6 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/api/v1/auth/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth/refreshtoken").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/auth/confirm").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/auth/reset").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/auth/resetpassword").permitAll()
                 .antMatchers("/api/v1/user/**").hasAnyAuthority(
                         ERoles.SUPER_ADMIN.name(),
                         ERoles.SUPERVISOR.name(),

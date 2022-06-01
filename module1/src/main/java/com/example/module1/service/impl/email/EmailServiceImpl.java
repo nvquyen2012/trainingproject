@@ -1,6 +1,5 @@
-package com.example.module1.service.impl;
+package com.example.module1.service.impl.email;
 
-import com.example.trainingbase.entity.auth.ConfirmationToken;
 import com.example.module1.service.EmailService;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -29,17 +28,36 @@ public class EmailServiceImpl implements EmailService {
         helper.setSubject("Confirm your email");
 //        helper.setTo(email);
         helper.setTo("fateavernous@gmail.com");
-        String emailContent = getEmailContent(email, link);
+        String emailContent = getConfirmEmailContent(email, link);
         helper.setText(emailContent, true);
         javaMailSender.send(mimeMessage);
     }
 
-    private String getEmailContent(String email, String link) throws IOException, TemplateException {
+    @Override
+    public void sendMail(String otp) throws MessagingException, IOException, TemplateException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        helper.setSubject("Here is your otp to reset password");
+        helper.setTo("fateavernous@gmail.com");
+        String emailContent = getOtpEmailContent(otp);
+        helper.setText(emailContent, true);
+        javaMailSender.send(mimeMessage);
+    }
+
+    private String getConfirmEmailContent(String email, String link) throws IOException, TemplateException {
         StringWriter stringWriter = new StringWriter();
         Map<String, Object> model = new HashMap<>();
         model.put("authUserEmail", email);
         model.put("authUserLink", link);
         configuration.getTemplate("email.ftlh").process(model, stringWriter);
+        return stringWriter.getBuffer().toString();
+    }
+
+    private String getOtpEmailContent(String otp) throws IOException, TemplateException {
+        StringWriter stringWriter = new StringWriter();
+        Map<String, Object> model = new HashMap<>();
+        model.put("authUserOtp", otp);
+        configuration.getTemplate("otp.ftlh").process(model, stringWriter);
         return stringWriter.getBuffer().toString();
     }
 }

@@ -8,4 +8,5 @@ import java.io.IOException;
 
 public interface EmailService {
     void sendMail(String mail, String link) throws MessagingException, IOException, TemplateException;
+    void sendMail(String otp) throws MessagingException, IOException, TemplateException;
 }

@@ -1,8 +1,7 @@
 package com.example.module1.controller;
 
-import com.example.module1.model.RegisterUserInfo;
+import com.example.module1.dto.RegisterUserInfo;
 import com.example.module1.service.UserService;
-import com.example.module1.service.impl.UserDetailsServiceImpl;
 import com.example.trainingbase.constants.HttpStatusConstants;
 import com.example.trainingbase.entity.auth.AuthUser;
 import com.example.trainingbase.payload.BibResponse;

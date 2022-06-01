@@ -1,19 +1,11 @@
 package com.example.module1.controller;
 
-import com.example.module1.model.RegisterUserInfo;
-import com.example.module1.repository.UserRepository;
 import com.example.module1.service.AuthService;
 import com.example.module1.service.UserService;
-import com.example.module1.service.impl.AuthServiceImpl;
-import com.example.module1.service.impl.UserDetailsServiceImpl;
 import com.example.trainingbase.constants.HttpStatusConstants;
-import com.example.trainingbase.entity.auth.AuthUser;
 import com.example.trainingbase.payload.BibResponse;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/v1/admin")

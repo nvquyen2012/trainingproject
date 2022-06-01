@@ -1,13 +1,12 @@
 package com.example.module1.service.impl;
 
-import com.example.module1.model.RegisterUserInfo;
-import com.example.module1.repository.ConfirmationTokenRepository;
+import com.example.module1.dto.RegisterUserInfo;
 import com.example.module1.repository.UserRepository;
 import com.example.module1.service.UserService;
+import com.example.module1.service.impl.registration.ConfirmationTokenService;
 import com.example.trainingbase.constants.HttpStatusConstants;
 import com.example.trainingbase.entity.auth.AuthUser;
 import com.example.trainingbase.entity.auth.ConfirmationToken;
-import com.example.trainingbase.entity.auth.ERoles;
 import com.example.trainingbase.entity.auth.EStatus;
 import com.example.trainingbase.exceptions.BusinessException;
 import com.example.trainingbase.payload.BibResponse;
@@ -35,22 +34,11 @@ public class UserDetailsServiceImpl implements UserService {
                 new BusinessException(HttpStatusConstants.EMAIL_NOT_EXISTS_CODE, HttpStatusConstants.EMAIL_NOT_EXISTS_MESSAGE));
     }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        AuthUser authUser = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(STATUS_NOT_OK));
-//        return User.builder()
-//                .username(authUser.getEmail())
-//                .password(authUser.getPassword())
-//                .authorities(AuthorityUtils.createAuthorityList(authUser.getRole()))
-//                .build();
-//    }
     @Override
     public String signUpUser(AuthUser authUser){
-        boolean userExisted = userRepository.findByEmail(authUser.getEmail()).isPresent();
-        if(userExisted){
-            throw new BusinessException(HttpStatusConstants.EMAIL_EXIST_CODE,
+        if(userRepository.findByEmail(authUser.getEmail()).isPresent())
+                throw new BusinessException(HttpStatusConstants.EMAIL_EXIST_CODE,
                                         HttpStatusConstants.EMAIL_EXIST_MESSAGE);
-        }
         String encodedPassword = bCryptPasswordEncoder.encode(authUser.getPassword());
         authUser.setPassword(encodedPassword);
         authUser.setStatus(EStatus.INACTIVE.name());

@@ -1,12 +1,10 @@
 package com.example.module1.service;
 
-import com.example.module1.model.RegisterUserInfo;
+import com.example.module1.dto.RegisterUserInfo;
 import com.example.trainingbase.entity.auth.AuthUser;
 import com.example.trainingbase.payload.BibResponse;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
-import javax.transaction.Transactional;
 
 public interface UserService extends UserDetailsService {
     UserDetails loadUserByUsername (String email);
