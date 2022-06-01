@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,24 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @AllArgsConstructor
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    /*
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http
-                .csrf().disable()
-                .authorizeHttpRequests()
-                .antMatchers("/api/registration/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin();
-        return http.build();
-    }
-
-     */
-
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private AuthEntryPointJwt unauthorizedHandler;
@@ -62,21 +47,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/api/v1/auth/register").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/v1/auth/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth/refreshtoken").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/auth/resetpassword").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/auth/confirm").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/auth/reset").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/auth/resetpassword").permitAll()
-                .antMatchers("/api/v1/user/**").hasAnyAuthority(
-                        ERoles.SUPER_ADMIN.name(),
-                        ERoles.SUPERVISOR.name(),
-                        ERoles.ADMIN_CHECKER.name(),
-                        ERoles.ADMIN_MAKER.name(),
-                        ERoles.ADMIN_VIEWER.name()
-                )
-                .antMatchers(HttpMethod.PUT, "/api/v1/admin/**").hasAnyAuthority(
-                        ERoles.SUPER_ADMIN.name(),
-                        ERoles.ADMIN_CHECKER.name(),
-                        ERoles.ADMIN_MAKER.name()
-                )
+                .antMatchers("/api/v1/user/**").permitAll()
+                .antMatchers("/api/v1/admin/**").permitAll()
                 .anyRequest()
                 .authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

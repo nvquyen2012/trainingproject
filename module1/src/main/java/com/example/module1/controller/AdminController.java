@@ -5,6 +5,7 @@ import com.example.module1.service.UserService;
 import com.example.trainingbase.constants.HttpStatusConstants;
 import com.example.trainingbase.payload.BibResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,18 +16,21 @@ public class AdminController {
     private final UserService userService;
     private final AuthService authService;
 
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     @PutMapping(path = "/role")
     public BibResponse updateUserById(@RequestParam(name = "id") Integer id, @RequestParam(name = "role") String role){
         BibResponse bibResponse = userService.updateUserRoleById(id, role);
         return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE, bibResponse);
     }
 
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     @PutMapping(path = "/company")
     public BibResponse updateUserByCompanyId(@RequestParam(name = "id") Integer id, @RequestParam(name = "companyId") Integer companyId){
         BibResponse bibResponse = userService.updateUserCompanyById(id, companyId);
         return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE, bibResponse);
     }
 
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     @PutMapping(path = "/verify")
     public BibResponse verifyUser(@RequestParam(name = "id") Integer id, @RequestParam(name = "decision") String decision){
         BibResponse bibResponse = authService.verifyUser(id, decision);
