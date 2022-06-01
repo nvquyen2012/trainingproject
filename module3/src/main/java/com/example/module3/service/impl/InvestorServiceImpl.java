@@ -67,11 +67,11 @@ public class InvestorServiceImpl implements InvestorService {
             individual.setUpdatedAt(LocalDateTime.now());
             String subj = "Changed status for user " +individual.getName()+".\n Please, confirm!";
             //send mail to client and investor
-            individualService.sendMail(individual.getEmail(), subj);
+//            individualService.sendMail(individual.getEmail(), subj);
 
             Optional<Lead> lead = leadRepository.findLeadByRmId(individual.getRmId());
             if ( lead.isPresent()) {
-                individualService.sendMail(lead.get().getEmail(), subj);
+//                individualService.sendMail(lead.get().getEmail(), subj);
             }
 
             this.investorIndividualRepository.save(individual);
