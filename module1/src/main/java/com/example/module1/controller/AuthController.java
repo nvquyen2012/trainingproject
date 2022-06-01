@@ -32,13 +32,11 @@ import java.io.IOException;
 @RequestMapping(path = "/api/v1/auth")
 @AllArgsConstructor
 public class AuthController {
-    private AuthenticationManager authenticationManager;
-    private JwtUtils jwtUtils;
-    private RegistrationService registrationService;
-    private AuthService authService;
-    private UserRepository userRepository;
-    private RefreshTokenService refreshTokenService;
-    private EmailService emailService;
+    private final RegistrationService registrationService;
+    private final AuthService authService;
+    private final RefreshTokenService refreshTokenService;
+    private final EmailService emailService;
+    private final JwtUtils jwtUtils;
 
     //TODO: Logging user information
     @PostMapping(value = "/register")
@@ -51,15 +49,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public JwtResponse authenticateUser(@Valid @RequestBody LoginUserInfo request) {
-        authService.verifyLogin(request);
-        AuthUser authUser = userRepository.findByEmail(request.getEmail()).get();
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        //authentication.getPrincipal()
-        String jwt = jwtUtils.generateJwtToken(authUser.getEmail());
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(authUser.getId());
-        return new JwtResponse(jwt,refreshToken.getToken(), authUser.getEmail(), authUser.getRole());
+        return authService.verifyLogin(request);
     }
 
     @PostMapping("/refreshtoken")

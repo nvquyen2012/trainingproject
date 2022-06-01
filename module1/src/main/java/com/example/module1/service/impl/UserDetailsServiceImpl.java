@@ -54,10 +54,11 @@ public class UserDetailsServiceImpl implements UserService {
         String encodedPassword = bCryptPasswordEncoder.encode(authUser.getPassword());
         authUser.setPassword(encodedPassword);
         authUser.setStatus(EStatus.INACTIVE.name());
+        authUser.setLoginFailCount(0);
         userRepository.save(authUser);
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(),
-                                                                    LocalDateTime.now().plusMinutes(60),
+                                                                    LocalDateTime.now().plusMinutes(15),
                                                                     authUser);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
         return token;

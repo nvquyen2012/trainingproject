@@ -19,4 +19,5 @@ public class JwtResponse {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
+
 }

@@ -10,18 +10,18 @@ import com.example.trainingbase.constants.HttpStatusConstants;
 import com.example.trainingbase.entity.auth.AuthUser;
 import com.example.trainingbase.payload.BibResponse;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/v1/admin")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AdminController {
 
-    private UserService userService;
-    private AuthService authService;
-    private UserRepository userRepository;
+    private final UserService userService;
+    private final AuthService authService;
 
     @PutMapping(path = "/role")
     public BibResponse updateUserById(@RequestParam(name = "id") Integer id, @RequestParam(name = "role") String role){

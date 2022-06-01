@@ -30,6 +30,14 @@ public class AuthLoginLog {
     @Column(name = "updated_by")
     private String updatedBy;
 
+    public AuthLoginLog(Integer userId, String loginStatus, Timestamp updatedAt, String createdBy) {
+        this.userId = userId;
+        this.loginStatus = loginStatus;
+        this.updatedAt = updatedAt;
+        this.createdBy = createdBy;
+        this.device = "1";
+    }
+
     public int getId() {
         return id;
     }
