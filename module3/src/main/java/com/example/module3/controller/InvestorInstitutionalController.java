@@ -2,7 +2,6 @@ package com.example.module3.controller;
 
 import com.example.module3.service.InvestorInstitutionalService;
 import com.example.trainingbase.dto.InvestorInstitutionalDto;
-import com.example.trainingbase.entity.crm.InvestorIndividual;
 import com.example.trainingbase.entity.crm.InvestorInstitutional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

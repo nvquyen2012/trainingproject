@@ -9,7 +9,6 @@ import java.util.Optional;
 public interface InvestorInstitutionalRepository extends JpaRepository<InvestorInstitutional,String> {
 
     Optional<InvestorInstitutional> findByNpwpNo(String npwpNo);
-
     List<InvestorInstitutional> findInvestorInstitutionalByRmIdAndStatus(int rmId, String status);
     List<InvestorInstitutional> findInvestorInstitutionalByRmId(int rmId);
 }

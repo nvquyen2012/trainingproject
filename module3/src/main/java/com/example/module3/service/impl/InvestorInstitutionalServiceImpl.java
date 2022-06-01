@@ -2,6 +2,7 @@ package com.example.module3.service.impl;
 
 import com.example.module3.repository.InvestorInstitutionalRepository;
 import com.example.module3.service.InvestorInstitutionalService;
+import com.example.module3.util.MailSenderService;
 import com.example.trainingbase.constants.ConstantDefault;
 import com.example.trainingbase.constants.RegexConstant;
 import com.example.trainingbase.dto.InvestorInstitutionalDto;
@@ -33,7 +34,7 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
     private InvestorInstitutionalMapper institutionalMapper;
 
     @Autowired
-    private JavaMailSender emailSender;
+    private MailSenderService emailSender;
 
     @Override
     public InvestorInstitutionalDto createInvestorInstitutional(InvestorInstitutional investor) {
@@ -59,7 +60,7 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
             message.setText("To confirm your account please click here: " +
                     "http://localhost:8080/confirm-account?uuid=" + investor.getInvestorId());
             log.info("Start sending the information by email...");
-            emailSender.send(message);
+//            emailSender.sendEmail(message);
             log.info("mail sent successful!");
         }
 
