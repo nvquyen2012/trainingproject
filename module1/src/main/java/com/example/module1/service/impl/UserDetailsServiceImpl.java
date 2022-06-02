@@ -2,6 +2,8 @@ package com.example.module1.service.impl;
 
 import com.example.module1.dto.RegisterUserInfo;
 import com.example.module1.repository.UserRepository;
+import com.example.module1.repository.specification.AuthUserSpecifications;
+import com.example.module1.repository.specification.FilterInfo;
 import com.example.module1.service.UserService;
 import com.example.module1.service.impl.registration.ConfirmationTokenService;
 import com.example.trainingbase.constants.HttpStatusConstants;
@@ -18,13 +20,17 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.logging.Filter;
 
 @Service
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final AuthUserSpecifications authUserSpecifications;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
@@ -53,8 +59,8 @@ public class UserDetailsServiceImpl implements UserService {
     }
 
     @Override
-    public AuthUser findById(Integer Id){
-        AuthUser authUser = userRepository.findById(Id).orElseThrow(
+    public AuthUser findById(Integer id){
+        AuthUser authUser = userRepository.findById(id).orElseThrow(
                 () -> new BusinessException(HttpStatusConstants.INVALID_USER_ID_CODE, HttpStatusConstants.INVALID_USER_ID_MESSAGE)
         );
         return authUser;
@@ -114,6 +120,21 @@ public class UserDetailsServiceImpl implements UserService {
         );
         authUser.setCompanyId(companyId);
         return new BibResponse(HttpStatusConstants.SUCCESS_CODE, HttpStatusConstants.SUCCESS_MESSAGE, authUser);
+    }
+
+    @Override
+    public List<AuthUser> findUser(List<FilterInfo> filterInfos) {
+        List<FilterInfo> filterInfoList = new ArrayList<>();
+        for(FilterInfo filter : filterInfos){
+            FilterInfo filterInfo = FilterInfo.builder()
+                    .field(filter.getField())
+                    .operator(filter.getOperator())
+                    .value(filter.getValue())
+                    .values(filter.getValues()).build();
+            filterInfoList.add(filterInfo);
+        }
+        List<AuthUser> authUsers = authUserSpecifications.getQueryResult(filterInfoList);
+        return authUsers;
     }
 
 }

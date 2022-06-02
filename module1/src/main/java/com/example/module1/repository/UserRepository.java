@@ -2,6 +2,7 @@ package com.example.module1.repository;
 
 import com.example.trainingbase.entity.auth.AuthUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @Transactional
 @Repository
-public interface UserRepository extends JpaRepository<AuthUser, Integer> {
+public interface UserRepository extends JpaRepository<AuthUser, Integer>, JpaSpecificationExecutor {
 
     Optional<AuthUser> findById(Integer Id);
     Optional<AuthUser> findByEmail(String email);

@@ -1,6 +1,7 @@
 package com.example.module1.controller;
 
 import com.example.module1.dto.RegisterUserInfo;
+import com.example.module1.repository.specification.FilterInfo;
 import com.example.module1.service.UserService;
 import com.example.trainingbase.constants.HttpStatusConstants;
 import com.example.trainingbase.entity.auth.AuthUser;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/user")
@@ -18,7 +20,11 @@ import javax.validation.Valid;
 public class UserController {
     private UserService userService;
 
-    //TODO: specifications -> getmapping
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','SUPERVISOR','SALE_RM')")
+    @PostMapping(path = "/list")
+    public List<AuthUser> findAuthUser(@RequestBody List<FilterInfo> filterInfos){
+        return userService.findUser(filterInfos);
+    }
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','SUPERVISOR','SALE_RM')")
     @GetMapping(path = "/id")
     public AuthUser findById(@RequestParam(name = "id") Integer Id){
