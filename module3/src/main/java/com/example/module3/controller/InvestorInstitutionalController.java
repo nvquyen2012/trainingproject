@@ -23,9 +23,9 @@ public class InvestorInstitutionalController {
     public ResponseEntity<Object> saveInvestor(@RequestBody InvestorInstitutional req) {
         try {
             log.info("Start saving a new investor");
-            InvestorInstitutionalDto result = institutionalService.createInvestorInstitutional(req);
+            institutionalService.createInvestorInstitutional(req);
             log.info("Finish saving a new investor");
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<>(req,HttpStatus.OK);
 
         } catch (Exception e) {
             log.error(e.getMessage());
