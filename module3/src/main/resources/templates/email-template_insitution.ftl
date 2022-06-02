@@ -8,7 +8,7 @@
     <title>Spring Boot Email using FreeMarker</title>
 </head>
 <body>
-<div style="margin-top: 10px">Hello, ${Investor.name}</div>
+<div style="margin-top: 10px">Hello, ${Investor.companyName}</div>
 <div>Your Investor Profile status is <b>${Investor.status}</b></div>
 <br/>
 <div> Have a nice day..!</div>

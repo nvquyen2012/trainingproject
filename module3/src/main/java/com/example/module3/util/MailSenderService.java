@@ -1,6 +1,9 @@
 package com.example.module3.util;
 
 import com.example.module3.config.EmailConfig;
+import com.example.trainingbase.entity.crm.InvestorIndividual;
+import com.example.trainingbase.entity.crm.InvestorInstitutional;
+import com.example.trainingbase.entity.crm.Lead;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -33,14 +36,14 @@ public class MailSenderService {
     @Autowired
     private Configuration config;
 
-    public void sendEmail(EmailConfig mail, Object object) {
+    public void sendEmail(EmailConfig mail, Object object, String nameFile) {
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage,
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
+            Template template = config.getTemplate(nameFile);
 
-            Template template = config.getTemplate("email-template.ftl");
             Map<String, Object> model = new HashMap<>();
             model.put("Investor", object);
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
@@ -48,7 +51,7 @@ public class MailSenderService {
             helper.setFrom(env.getProperty("spring.mail.from"));
             helper.setTo(mail.getTo());
             helper.setSubject(mail.getSubject());
-            helper.setText(html,true);
+            helper.setText(html, true);
             javaMailSender.send(mailMessage);
 
         } catch (Exception e) {

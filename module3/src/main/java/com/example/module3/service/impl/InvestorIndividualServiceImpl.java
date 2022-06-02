@@ -3,6 +3,7 @@ package com.example.module3.service.impl;
 import com.example.module3.config.EmailConfig;
 import com.example.module3.repository.InvestorIndividualRepository;
 import com.example.module3.service.InvestorIndividualService;
+import com.example.module3.util.Constants;
 import com.example.module3.util.MailSenderService;
 import com.example.trainingbase.constants.ConstantDefault;
 import com.example.trainingbase.constants.RegexConstant;
@@ -75,7 +76,7 @@ public class InvestorIndividualServiceImpl implements InvestorIndividualService 
             message.setTo(investor.getEmail());
             message.setSubject("BIB - Complete your registration!!");
             log.info("Start sending the information by email...");
-            emailSender.sendEmail(message, individualMapper.investorToDto(investor));
+            emailSender.sendEmail(message, individualMapper.investorToDto(investor), Constants.FILE_INDIVIDUAL);
             log.info("mail sent successful!");
         }
     }
