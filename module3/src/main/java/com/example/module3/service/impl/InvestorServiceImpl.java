@@ -4,7 +4,9 @@ import com.example.module3.repository.InvestorIndividualRepository;
 import com.example.module3.repository.InvestorInstitutionalRepository;
 import com.example.module3.repository.LeadRepository;
 import com.example.module3.service.InvestorIndividualService;
+import com.example.module3.service.InvestorInstitutionalService;
 import com.example.module3.service.InvestorService;
+import com.example.module3.service.LeadService;
 import com.example.trainingbase.dto.InvestorStatusDto;
 import com.example.trainingbase.entity.crm.InvestorIndividual;
 import com.example.trainingbase.entity.crm.InvestorInstitutional;
@@ -37,6 +39,12 @@ public class InvestorServiceImpl implements InvestorService {
     @Autowired
     private InvestorIndividualService individualService;
 
+    @Autowired
+    private InvestorInstitutionalService institutionalService;
+
+    @Autowired
+    private LeadService leadService;
+
     @Override
     public List<InvestorStatusDto> getListInvestorByRmId(int rmId, String status) {
         List<InvestorStatusDto> objectList = new ArrayList<>();
@@ -65,14 +73,8 @@ public class InvestorServiceImpl implements InvestorService {
             InvestorIndividual individual = investorIndividual.get();
             individual.setStatus(investorStatusDto.getStatus());
             individual.setUpdatedAt(LocalDateTime.now());
-            String subj = "Changed status for user " +individual.getName()+".\n Please, confirm!";
-            //send mail to client and investor
-//            individualService.sendMail(individual.getEmail(), subj);
 
-            Optional<Lead> lead = leadRepository.findLeadByRmId(individual.getRmId());
-            if ( lead.isPresent()) {
-//                individualService.sendMail(lead.get().getEmail(), subj);
-            }
+            individualService.sendMail(individual);
 
             this.investorIndividualRepository.save(individual);
             investorStatusDto =  investorStatusMapper.toIndividualDto(individual);
@@ -82,6 +84,15 @@ public class InvestorServiceImpl implements InvestorService {
             InvestorInstitutional institutional = investorInstitutional.get();
             institutional.setStatus(investorStatusDto.getStatus());
             institutional.setUpdatedAt(LocalDateTime.now());
+
+            //send mail to client and investor
+            institutionalService.sendMail(institutional);
+
+            Optional<Lead> lead = leadRepository.findLeadByRmId(institutional.getRmId());
+            if ( lead.isPresent()) {
+                leadService.sendMail(lead.get());
+            }
+
             this.investorInstitutionalRepository.save(institutional);
             investorStatusDto =  investorStatusMapper.toInstitutionalDto(institutional);
         }

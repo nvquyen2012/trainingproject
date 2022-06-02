@@ -13,7 +13,7 @@ public interface InvestorIndividualService {
 
     Optional<InvestorIndividual> getInvestorById(String id);
 
-//    void sendMail(String to, String subj);
+    void sendMail(InvestorIndividual investor);
 
     Optional<InvestorIndividual> getInvestorByIdAndRmId(String id, Integer rmId);
 

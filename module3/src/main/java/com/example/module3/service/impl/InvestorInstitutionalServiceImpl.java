@@ -52,18 +52,21 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
         if (!Pattern.compile(RegexConstant.IDENTIFY_REGEX).matcher(investor.getInvestorId()).matches()) {
             throw new BusinessException("403", "This identify is not valid");
         }
+        sendMail(investor);
 
-//        if (Objects.equals(investor.getEngageOption(), EngageOption.REMOTE.getValue())) {
-        EmailConfig message = new EmailConfig();
-        message.setTo(investor.getEmail());
-        message.setSubject("BIB - Complete your registration!!");
-//            message.setText("To confirm your account please click here: " +
-//                    "http://localhost:8080/confirum-account?uuid=" + investor.getInvestorId());
-        log.info("Start sending the information by email...");
-        emailSender.sendEmail(message, institutionalMapper.toDto(investor));
-        log.info("mail sent successful!");
+        institutionalRepository.save(investor);
+    }
 
-//        institutionalRepository.save(investor);
+    @Override
+    public void sendMail(InvestorInstitutional investor) {
+        if (Objects.equals(investor.getEngageOption(), EngageOption.REMOTE.getValue())) {
+            EmailConfig message = new EmailConfig();
+            message.setTo(investor.getEmail());
+            message.setSubject("BIB - Complete your registration!!");
+            log.info("Start sending the information by email...");
+            emailSender.sendEmail(message, institutionalMapper.toDto(investor));
+            log.info("mail sent successful!");
+        }
     }
 
     @Override
