@@ -86,7 +86,7 @@ public class InvestorInstitutionalServiceImpl implements InvestorInstitutionalSe
     }
 
     @Override
-    public Optional<InvestorInstitutional> getInvestorById(String id) {
+    public Optional<InvestorInstitutional> getInstituInvestorById(String id) {
         return institutionalRepository.findById(id);
     }
 

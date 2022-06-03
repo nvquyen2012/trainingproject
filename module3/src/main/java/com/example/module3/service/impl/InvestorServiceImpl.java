@@ -51,11 +51,11 @@ public class InvestorServiceImpl implements InvestorService {
         List<InvestorIndividual> individualList = new ArrayList<>();
         List<InvestorInstitutional> institutionalList = new ArrayList<>();
         if ("".equals(status)) {
-            individualList = investorIndividualRepository.findInvestorIndividualsByRmId(rmId);
-            institutionalList = investorInstitutionalRepository.findInvestorInstitutionalByRmId(rmId);
+            individualList = investorIndividualRepository.findByRmId(rmId);
+            institutionalList = investorInstitutionalRepository.findByRmId(rmId);
         } else {
-            individualList = investorIndividualRepository.findInvestorIndividualsByRmIdAndStatus(rmId, status);
-            institutionalList = investorInstitutionalRepository.findInvestorInstitutionalByRmIdAndStatus(rmId, status);
+            individualList = investorIndividualRepository.findByRmIdAndStatus(rmId, status);
+            institutionalList = investorInstitutionalRepository.findByRmIdAndStatus(rmId, status);
         }
         for (int i = 0; i < individualList.size(); i++) {
             objectList.add(investorStatusMapper.toIndividualDto(individualList.get(i)));
@@ -68,7 +68,7 @@ public class InvestorServiceImpl implements InvestorService {
 
     @Override
     public InvestorStatusDto updateInvestorStatus(int rmId, InvestorStatusDto investorStatusDto) {
-        Optional<InvestorIndividual> investorIndividual = investorIndividualRepository.findInvestorIndividualsByRmIdAndInvestorId(rmId, investorStatusDto.getInvestorId());
+        Optional<InvestorIndividual> investorIndividual = investorIndividualRepository.findByRmIdAndInvestorId(rmId, investorStatusDto.getInvestorId());
         if (investorIndividual.isPresent()) {
             InvestorIndividual individual = investorIndividual.get();
             individual.setStatus(investorStatusDto.getStatus());
@@ -79,7 +79,7 @@ public class InvestorServiceImpl implements InvestorService {
             this.investorIndividualRepository.save(individual);
             investorStatusDto =  investorStatusMapper.toIndividualDto(individual);
         }
-        Optional<InvestorInstitutional> investorInstitutional = investorInstitutionalRepository.findById(investorStatusDto.getInvestorId());
+        Optional<InvestorInstitutional> investorInstitutional = investorInstitutionalRepository.findByRmIdAndInvestorId(rmId, investorStatusDto.getInvestorId());
         if (investorInstitutional.isPresent()) {
             InvestorInstitutional institutional = investorInstitutional.get();
             institutional.setStatus(investorStatusDto.getStatus());

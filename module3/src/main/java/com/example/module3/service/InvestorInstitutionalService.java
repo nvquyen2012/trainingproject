@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface InvestorInstitutionalService {
     void createInvestorInstitutional(InvestorInstitutional investor);
 
-    Optional<InvestorInstitutional> getInvestorById(String id);
+    Optional<InvestorInstitutional> getInstituInvestorById(String id);
   
     InvestorInstitutionalDto findByInvestorId(String id);
 

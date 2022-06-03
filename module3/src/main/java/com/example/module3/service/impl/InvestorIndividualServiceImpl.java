@@ -83,7 +83,7 @@ public class InvestorIndividualServiceImpl implements InvestorIndividualService 
 
     @Override
     public Optional<InvestorIndividual> getInvestorByIdAndRmId(String id, Integer rmId) {
-        return investorIndividualRepository.findInvestorIndividualByInvestorIdAndRmId(id, rmId);
+        return investorIndividualRepository.findByInvestorIdAndRmId(id, rmId);
     }
 
     @Override

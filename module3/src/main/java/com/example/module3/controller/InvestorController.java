@@ -3,7 +3,6 @@ package com.example.module3.controller;
 import com.example.module3.service.InvestorIndividualService;
 import com.example.module3.service.InvestorInstitutionalService;
 import com.example.module3.service.InvestorService;
-import com.example.module3.service.impl.InvestorIndividualServiceImpl;
 import com.example.trainingbase.dto.InvestorStatusDto;
 import com.example.trainingbase.entity.crm.InvestorIndividual;
 import com.example.trainingbase.entity.crm.InvestorInstitutional;
@@ -40,7 +39,7 @@ public class InvestorController {
     public ResponseEntity<Object> updateStudent(@RequestParam Integer rmId,@RequestBody InvestorStatusDto req) {
         try {
             Optional<InvestorIndividual> currentInvestorIndividual = investorIndividualService.getInvestorById(req.getInvestorId());
-            Optional<InvestorInstitutional> currentInvestorInstitutional = institutionalService.getInvestorById(req.getInvestorId());
+            Optional<InvestorInstitutional> currentInvestorInstitutional = institutionalService.getInstituInvestorById(req.getInvestorId());
             if (!currentInvestorIndividual.isPresent() && !currentInvestorInstitutional.isPresent()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
