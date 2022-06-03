@@ -6,5 +6,6 @@ public enum ERoles {
     SUPERVISOR,
     ADMIN_CHECKER,
     ADMIN_MAKER,
-    ADMIN_VIEWER
+    ADMIN_VIEWER,
+    USER
 }

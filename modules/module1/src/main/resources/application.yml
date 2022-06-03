@@ -6,13 +6,25 @@ spring:
     show-sql: true
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  hibernate:
-    ddl-auto: update
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  security:
+    user:
+      name: bib
+      password: 123456
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tungcsp221199@gmail.com
+    password: yreitgydtplzkfcw
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 server:
   error:
     include-message: always
-
-#eureka:
-#  client:
-#    enabled: false

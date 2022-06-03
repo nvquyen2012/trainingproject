@@ -1,8 +1,8 @@
 package com.example.module1.controller;
 
 import com.example.module1.dto.RegistrationDTO;
-import com.example.module1.service.AuthUserService;
-import com.example.module1.service.RegistrationService;
+import com.example.module1.service.impl.AuthUserService;
+import com.example.module1.service.impl.RegistrationService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

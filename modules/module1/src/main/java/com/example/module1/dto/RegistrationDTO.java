@@ -9,4 +9,5 @@ public class RegistrationDTO {
     private Integer companyId;
     private String fullName;
     private String role;
+    private String password;
 }

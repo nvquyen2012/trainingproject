@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
 
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.enabled;
+
 @Entity
 @Getter
 @Setter
@@ -18,6 +20,7 @@ import java.util.Collections;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 public class AuthUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -78,38 +81,23 @@ public class AuthUser implements UserDetails {
     @Column(name = "username")
     private String username;
 
-    @Enumerated(EnumType.STRING)
-    private AuthUserRole authUserRole;
-    private Boolean locked;
-    private Boolean enabled;
+//    private Boolean locked;
+//    private Boolean enabled;
 
-    public AuthUser(String fullName, String image, String email, String password, String phoneNumber, String countryPhonePrefix, String role, int workspace, String status, Integer loginFailCount, int companyId, Timestamp lastLogin, Timestamp expireDate, Timestamp createdAt, Timestamp updatedAt, String createdBy, String updatedBy, String username, AuthUserRole authUserRole, Boolean locked, Boolean enabled) {
-        this.fullName = fullName;
-        this.image = image;
+    public AuthUser(String email, String phoneNumber, Integer companyId, String fullName, String role, String password) {
         this.email = email;
-        this.password = password;
         this.phoneNumber = phoneNumber;
-        this.countryPhonePrefix = countryPhonePrefix;
-        this.role = role;
-        this.workspace = workspace;
-        this.status = status;
-        this.loginFailCount = loginFailCount;
-        this.companyId = companyId;
-        this.lastLogin = lastLogin;
-        this.expireDate = expireDate;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.username = username;
-        this.authUserRole = authUserRole;
-        this.locked = locked;
-        this.enabled = enabled;
+        this.companyId= companyId;
+        this.fullName = fullName;
+        this.role=role;
+        this.password=password;
     }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(authUserRole.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
         return Collections.singletonList(authority);
     }
 
@@ -120,16 +108,16 @@ public class AuthUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !locked;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return enabled;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
