@@ -23,9 +23,13 @@ import com.example.trainingbase.mapper.InvestorInstitutionalMapper;
 import com.example.trainingbase.mapper.InvestorStatusMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -63,24 +67,25 @@ public class InvestorServiceImpl implements InvestorService {
     private InvestorInstitutionalMapper institutionalMapper;
 
     @Override
-    public List<InvestorStatusDto> getListInvestorByRmId(int rmId, String status) {
-        List<InvestorStatusDto> objectList = new ArrayList<>();
-        List<InvestorIndividual> individualList = new ArrayList<>();
-        List<InvestorInstitutional> institutionalList = new ArrayList<>();
-        if ("".equals(status)) {
-            individualList = investorIndividualRepository.findInvestorIndividualsByRmId(rmId);
-            institutionalList = investorInstitutionalRepository.findInvestorInstitutionalByRmId(rmId);
-        } else {
-            individualList = investorIndividualRepository.findInvestorIndividualsByRmIdAndStatus(rmId, status);
-            institutionalList = investorInstitutionalRepository.findInvestorInstitutionalByRmIdAndStatus(rmId, status);
+    public List<InvestorStatusDto> getListInvestorByRmId(int page, int rmId, String status) {
+        List<Object> objectList;
+        List<InvestorStatusDto> rs = new ArrayList<>();
+        Sort sort = Sort.by("investor_id").ascending();
+        Pageable pageable = PageRequest.of(page, Constants.SIZE_PAGE, sort);
+        objectList = investorIndividualRepository.findInvestorByRmIdAndStatus(pageable, rmId, status).getContent();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy ");
+        for (int i = 0; i < objectList.size(); i++) {
+            InvestorStatusDto temp = new InvestorStatusDto();
+            Object[] values = (Object[]) objectList.get(i);
+            temp.setInvestorId(values[0].toString());
+            temp.setName(values[1].toString());
+            temp.setStatus(values[2].toString());
+            temp.setCreatedAt(values[3].toString());
+            temp.setUpdatedAt(values[4].toString());
+
+            rs.add(temp);
         }
-        for (int i = 0; i < individualList.size(); i++) {
-            objectList.add(investorStatusMapper.toIndividualDto(individualList.get(i)));
-        }
-        for (int i = 0; i < institutionalList.size(); i++) {
-            objectList.add(investorStatusMapper.toInstitutionalDto(institutionalList.get(i)));
-        }
-        return objectList;
+        return rs;
     }
 
     @Override
@@ -103,7 +108,7 @@ public class InvestorServiceImpl implements InvestorService {
             institutional.setUpdatedAt(LocalDateTime.now());
 
             //send mail to client and investor
-            sendMailToInstitutionalInvestor(institutional,  Constants.SUBJ_UPD_STATUS);
+            sendMailToInstitutionalInvestor(institutional, Constants.SUBJ_UPD_STATUS);
 
             Optional<Lead> lead = leadRepository.findLeadByRmId(institutional.getRmId());
             if (lead.isPresent()) {

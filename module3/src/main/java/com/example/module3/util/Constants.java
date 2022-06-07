@@ -10,4 +10,6 @@ public final class Constants {
     public static String SUBJ_REGISTER = "BIB - Complete your registration!";
 
     public static String SUBJ_UPD_STATUS = " BIB - Changed status successfully!";
+
+    public static int SIZE_PAGE = 5;
 }

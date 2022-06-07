@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -98,7 +99,8 @@ public class InvestorInstitutional extends AbstractEntity {
     private String sid;
     private String ifua;
 
-    private LocalDateTime createdAt;
+//    private LocalDateTime createdAt;
+//    private LocalDateTime updatedAt;
 
     private Integer engageOption;
 }

@@ -10,6 +10,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface InvestorStatusMapper {
+
     InvestorIndividual toIndividualEntity(InvestorStatusDto investorStatusDto);
 
     InvestorStatusDto toIndividualDto(InvestorIndividual investorIndividual);

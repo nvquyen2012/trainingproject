@@ -19,8 +19,6 @@ import java.util.Map;
 @Service
 @Slf4j
 public class MailSenderService {
-
-
     @Value("${spring.mail.from}")
     private String from;
     @Autowired

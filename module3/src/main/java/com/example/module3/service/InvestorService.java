@@ -9,7 +9,7 @@ import com.example.trainingbase.entity.crm.InvestorInstitutional;
 import java.util.List;
 
 public interface InvestorService {
-    List<InvestorStatusDto> getListInvestorByRmId(int rmId, String status);
+    List<InvestorStatusDto> getListInvestorByRmId(int page, int rmId, String status);
 
     InvestorStatusDto updateInvestorStatus(int rmId, InvestorStatusDto investorStatusDto);
 

@@ -8,7 +8,9 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -16,7 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "investor_individual", schema = "crm_bib")
-public class InvestorIndividual extends AbstractEntity {
+public class InvestorIndividual extends AbstractEntity{
 
     @Id
     @Column(name = "investor_id", unique = true, nullable = false, length = 36)
@@ -66,6 +68,11 @@ public class InvestorIndividual extends AbstractEntity {
     // BIB sync
     private String sid;
     private String ifua;
+
+//    private LocalDateTime createdAt;
+//    private LocalDateTime updatedAt;
+
+
 
     private Integer engageOption;
 }
