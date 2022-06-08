@@ -1,16 +1,15 @@
 package com.example.trainingbase.entity.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
+
 @Table(name = "confirm_token", schema = "auth_bib")
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConfirmationToken {
