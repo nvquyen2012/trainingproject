@@ -8,5 +8,6 @@ import java.io.IOException;
 import java.util.function.Predicate;
 
 public interface EmailService {
-    void sendEmail(String link, String email) throws MessagingException, IOException, TemplateException;
+    void sendMail(String mail, String link) throws MessagingException, IOException, TemplateException;
+    void sendMail(String otp) throws MessagingException, IOException, TemplateException;
 }
