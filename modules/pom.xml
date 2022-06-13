@@ -63,6 +63,12 @@
     </profiles>
 
     <dependencies>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>training-base</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <build>
         <pluginManagement>
