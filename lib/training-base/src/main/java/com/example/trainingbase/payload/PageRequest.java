@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BibPageRequest {
+public class PageRequest {
 
     private Integer page;
 
