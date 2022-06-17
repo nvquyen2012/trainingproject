@@ -3,8 +3,8 @@ package com.example.trainingbase.constants;
 public class SuccessMessage {
 
   // AuthController
-  public static final String SIGN_UP_SUCCESSFULLY = "Đăng ký thành công";
-  public static final String SIGN_IN_SUCCESSFULLY = "Đăng nhập thành công";
+  public static final String SIGN_UP_SUCCESSFULLY = "Register Successfully";
+  public static final String SIGN_IN_SUCCESSFULLY = "Login Successfully";
 
   // BidController
   public static final String CREATE_BID_SUCCESSFULLY = "Tạo hồ sơ dự thầu thành công";

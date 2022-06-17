@@ -7,8 +7,8 @@ import lombok.*;
 @Data
 public class JwtResponse {
 
-  @JsonProperty("id_token")
-  private String idToken;
+  @JsonProperty("token")
+  private String token;
   
   @JsonProperty("userInfo")
   private UserDto userInfo;

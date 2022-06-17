@@ -1,19 +1,23 @@
 package com.example.trainingbase.service;
 
+import com.example.trainingbase.dto.BasicDTO;
 import com.example.trainingbase.entity.AbstractEntity;
-import com.example.trainingbase.payload.PageRequest;
+import com.example.trainingbase.payload.BasePageRequest;
+import com.example.trainingbase.repository.BasicRepository;
 import org.springframework.data.domain.Page;
 
-public interface BasicService<T extends AbstractEntity> {
+public interface BasicService<T extends AbstractEntity, E extends BasicDTO> {
 
-    T create(T model);
+    E create(E model);
 
-    T update(T model);
+    E  update(E  model);
 
-    T getOne(Long id);
+    E  getOne(E model);
 
-    Page<T> get(PageRequest request);
+    Page<E> get(BasePageRequest request);
 
-    T delete(Long id);
+    void delete(Long id);
+
+    void setBasicRepository(BasicRepository<T> basicRepository);
 
 }

@@ -1,21 +1,20 @@
 package com.example.auth.controller;
 
+import com.example.auth.model.AuthRequest;
 import com.example.auth.model.DefaultResponse;
 import com.example.auth.model.JwtResponse;
-import com.example.auth.model.SignInRequest;
 import com.example.auth.model.SignUpRequest;
-import com.example.trainingbase.constants.ErrorMessage;
+import com.example.auth.security.jwt.AuthTokenFilter;
+import com.example.auth.security.jwt.JwtUntils;
+import com.example.auth.security.services.UserDetailsImpl;
+import com.example.auth.security.services.UserDetailsServiceImpl;
+import com.example.auth.service.AuthService;
+import com.example.auth.service.UserService;
 import com.example.trainingbase.constants.SuccessMessage;
 import com.example.trainingbase.dto.UserDto;
-import com.example.trainingbase.entity.enums.UserRole;
-import com.example.trainingbase.exceptions.NotFoundException;
-import com.example.trainingbase.security.jwt.AuthTokenFilter;
-import com.example.trainingbase.security.jwt.JwtUntils;
-import com.example.trainingbase.security.services.UserDetailsImpl;
-import com.example.trainingbase.security.services.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +34,9 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+@EntityScan(basePackages = "com.example.trainingbase.*")
 @Slf4j
 public class AuthController {
 
@@ -50,8 +49,14 @@ public class AuthController {
   @Autowired
   private JwtUntils jwtUntils;
 
+  @Autowired
+  private AuthService authService;
+
+  @Autowired
+  private UserService userService;
+
   @PostMapping("/signin")
-  public ResponseEntity<?> authenticateUser(@Valid @RequestBody SignInRequest request) {
+  public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthRequest request) {
     log.info(request.getUsername());
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
@@ -74,7 +79,7 @@ public class AuthController {
     userInfo.setProfileImagePath(userDetails.getProfileImagePath());
 
     JwtResponse response = new JwtResponse();
-    response.setIdToken(jwt);
+    response.setToken(jwt);
     response.setUserInfo(userInfo);
 
     HttpHeaders responseHeaders = new HttpHeaders();
@@ -91,18 +96,13 @@ public class AuthController {
 
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest request) {
-    String role = request.getRoles().iterator().next().toUpperCase();
-    if (UserRole.valueOf(role) != null) {
-      UserService
+      UserDto dto = userService.create(request);
       log.info("Create user with request: {}", request.toString());
-    } else {
-      throw new NotFoundException(ErrorMessage.ROLE_NOT_FOUND);
-    }
 
     // Set default response body
-    DefaultResponse<SupplierDto> defaultResponse = new DefaultResponse<>();
+    DefaultResponse<UserDto> defaultResponse = new DefaultResponse<>();
     defaultResponse.setMessage(SuccessMessage.SIGN_UP_SUCCESSFULLY);
-    defaultResponse.setData(supplierDto);
+    defaultResponse.setData(dto);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(defaultResponse);
   }
@@ -115,7 +115,7 @@ public class AuthController {
       if (authentication != null) {
         String jwtRefresh = jwtUntils.generateJwtToken(authentication);
         JwtResponse responseJwt = new JwtResponse();
-        responseJwt.setIdToken(jwtRefresh);
+        responseJwt.setToken(jwtRefresh);
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Access-Control-Expose-Headers", "Authorization");
@@ -151,7 +151,7 @@ public class AuthController {
         userInfo.setProfileImagePath(userDetails.getProfileImagePath());
 
         JwtResponse responseJwt = new JwtResponse();
-        responseJwt.setIdToken(jwt);
+        responseJwt.setToken(jwt);
         responseJwt.setUserInfo(userInfo);
 
         return ResponseEntity.ok().body(responseJwt);
